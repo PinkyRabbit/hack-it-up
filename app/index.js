@@ -1,11 +1,18 @@
 require('dotenv').config();
 
 const express = require('express');
+const path = require('path');
 
 const app = express();
 
+app.set('view engine', 'pug');
+
+const rootDirectory = path.resolve(__dirname, '..');
+app.use(express.static(path.join(rootDirectory, 'public')));
+app.set('views', path.join(rootDirectory, 'views'));
+
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.render('main');
 });
 
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
