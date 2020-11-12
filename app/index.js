@@ -1,15 +1,14 @@
-const path = require('path');
-const express = require('express');
+require('dotenv').config();
 
-require('./db');
-const initMiddlewares = require('./middlewares');
-const initRoutes      = require('./routes');
+const express = require('express');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '/public')));
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
-initMiddlewares(app);
-initRoutes(app);
-
-module.exports = app;
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});
