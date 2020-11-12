@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&subset=cyrillic');
+
+body {
+  background: #333333 url("/images/c/bg.jpg");
+  font-family: 'Lora', serif;
+}
+#content {
+  background: #ffffff;
+  padding: 20px;
+}
+main{
+  padding: 0 20px;
+}
+.logo{
+  width: 100%
+}
+h1{
+  margin-bottom: 0!important;
+  background: #a44170 url(../images/c/h1.png) repeat center center !important;
+  color: #fff;
+  padding: 10px 30px;
+  text-transform: capitalize;
+  margin: 0;
+}
+footer{
+  text-align: center;
+  background-color: #914469;
+  color: #f2f2f2;
+  padding: 15px;
+}
+a{
+  color: #fba9fb
+}

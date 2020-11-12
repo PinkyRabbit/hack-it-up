@@ -11,7 +11,11 @@ app.set('view engine', 'pug');
 app.set('views', path.join(rootDirectory, 'views'));
 
 app.get('/', (req, res) => {
-  res.render('main');
+  res.render('news-feed', {
+    page: {
+      title: 'главная',
+    },
+  });
 });
 
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
