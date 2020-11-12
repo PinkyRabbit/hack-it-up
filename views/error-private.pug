@@ -1,0 +1,8 @@
+//- error-private.pug
+extends layout/main.pug
+
+block content
+  .alert.alert-success(role='alert')
+    p= err.message
+  if err.stack
+    pre= err.stack

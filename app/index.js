@@ -2,6 +2,9 @@ require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
+const createError = require('http-errors');
+
+const errorHandler = require('./pages/error');
 
 const pages = require('../pages.json');
 
@@ -17,6 +20,9 @@ app.get('/', (req, res) => {
     page: pages.main,
   });
 });
+
+app.use((req, res, next) => next(createError(404, 'Страница не существует')));
+app.use(errorHandler);
 
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 app.listen(port, () => {
