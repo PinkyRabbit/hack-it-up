@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 
+const pages = require('../pages.json');
+
 const app = express();
 
 const rootDirectory = path.resolve(__dirname, '..');
@@ -12,9 +14,7 @@ app.set('views', path.join(rootDirectory, 'views'));
 
 app.get('/', (req, res) => {
   res.render('news-feed', {
-    page: {
-      title: 'главная',
-    },
+    page: pages.main,
   });
 });
 

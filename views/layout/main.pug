@@ -29,7 +29,7 @@ html(lang='ru')
       header
         div
           if page.image
-            img.logo(src='/images/{{page.image}}' alt='{{page.title || "hack-it-up"}}')
+            img.logo(src='/images/' + page.image alt=page.title || "hack-it-up")
           else
             img.logo(src='/images/c/no-image.jpg' alt='hack-it-up')
         h1= page.h1 || "Happy Hacking *_*"
