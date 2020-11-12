@@ -5,10 +5,9 @@ const path = require('path');
 
 const app = express();
 
-app.set('view engine', 'pug');
-
 const rootDirectory = path.resolve(__dirname, '..');
 app.use(express.static(path.join(rootDirectory, 'public')));
+app.set('view engine', 'pug');
 app.set('views', path.join(rootDirectory, 'views'));
 
 app.get('/', (req, res) => {
