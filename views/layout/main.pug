@@ -36,6 +36,9 @@ html(lang='ru')
       #content
         .row
           main.col-xs-12.col-sm-9
+            if messages
+              each message in messages
+                .alert(class="alert-" + message.type role='alert' style='margin-bottom: 10px')= message.msg
             block content
     footer
       .container

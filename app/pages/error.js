@@ -4,7 +4,8 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 function publicOutput(err, req, res) {
   if (err.status === 401 || err.status === 403) {
-    res.redirect('/');
+    req.flash('warning', 'Вы пробуете попасть в административную часть сайта. Авторизируйтесь.');
+    res.status(err.status).redirect('/');
   }
   res.status(404).render('error-public', { page: pages.error });
 }

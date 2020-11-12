@@ -4,6 +4,9 @@ const express = require('express');
 const path = require('path');
 const createError = require('http-errors');
 
+const initSession = require('./middlewares/session');
+const initFlash = require('./middlewares/flash');
+
 const errorHandler = require('./pages/error');
 
 const pages = require('../pages.json');
@@ -14,6 +17,9 @@ const rootDirectory = path.resolve(__dirname, '..');
 app.use(express.static(path.join(rootDirectory, 'public')));
 app.set('view engine', 'pug');
 app.set('views', path.join(rootDirectory, 'views'));
+
+initSession(app);
+initFlash(app);
 
 app.get('/', (req, res) => {
   res.render('news-feed', {
