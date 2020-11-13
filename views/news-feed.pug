@@ -2,4 +2,22 @@
 extends layout/main.pug
 
 block content
-  h1 Hello from content
+  if !articles || !articles.length
+    h2 В этом разделе сайта пока что нет постов...
+    p Но обязательно появятся =)
+  else
+    each article in articles
+      - var url = "/" + article.category.slug +"/" + article.slug;
+      - var imgSrc = article.image ? "/images/a/" + article.image : "/images/c/no-image.jpg";
+      h2
+        a(href=url)= article.h1
+      a(href=url rel="nofollow")
+        img.img-responsive.img-thumbnail(src=imgSrc alt=article.title)
+      p.description= article.description
+      ol.breadcrumb
+        li
+          span.glyphicon.glyphicon-calendar(aria-hidden="true")
+          |= article.createdAt
+        li
+          span.glyphicon.glyphicon-folder-open(aria-hidden="true")
+          a(href="/" + article.category.slug title=article.category.name)= article.category.name
