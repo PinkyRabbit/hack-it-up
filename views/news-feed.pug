@@ -9,15 +9,26 @@ block content
     each article in articles
       - var url = "/" + article.category.slug +"/" + article.slug;
       - var imgSrc = article.image ? "/images/a/" + article.image : "/images/c/no-image.jpg";
-      h2
-        a(href=url)= article.h1
-      a(href=url rel="nofollow")
+      article.news-feed
+        h2
+          a(href=url)= article.h1
+        if article.tags && article.tags.length
+          - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
+          section.tags
+            each tag, index in article.tags
+              a(href="/tag/" + tag.slug title="Тег " + tag.name)
+                span(class="label label-" + tagColors[index])
+                  span.glyphicon.glyphicon-tag(aria-hidden="true")
+                  |  
+                  | #{tag.name}
         img.img-responsive.img-thumbnail(src=imgSrc alt=article.title)
-      p.description= article.description
-      ol.breadcrumb
-        li
-          span.glyphicon.glyphicon-calendar(aria-hidden="true")
-          |= article.createdAt
-        li
-          span.glyphicon.glyphicon-folder-open(aria-hidden="true")
-          a(href="/" + article.category.slug title=article.category.name)= article.category.name
+        p.description= article.description
+        ol.breadcrumb
+          li
+            span.glyphicon.glyphicon-calendar(aria-hidden="true")
+            |  #{article.createdAt}
+          li
+            span.glyphicon.glyphicon-folder-open(aria-hidden="true")
+            |  
+            a(href="/" + article.category.slug title=article.category.name)= article.category.name
+        hr

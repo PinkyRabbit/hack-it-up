@@ -3,6 +3,7 @@
 body {
   background: #333333 url("/images/c/bg.jpg");
   font-family: 'Lora', serif;
+  font-size: 15px;
 }
 #content {
   background: #ffffff;
@@ -33,4 +34,27 @@ a{
 }
 #content a{
   color: #9100cc;
+}
+.tags {
+  margin: 10px 0;
+  line-height: 25px;
+}
+.tags a {
+  margin-right: 5px;
+}
+.tags a:hover,
+.tags a:focus {
+  text-decoration: none;
+}
+.news-feed .breadcrumb {
+  background-color: #ffffff;
+  color: #c781b8;
+  border: 1px solid #dddddd;
+}
+.news-feed .breadcrumb a{
+  color: #c781b8!important;
+  margin-left: 5px;
+}
+.news-feed .description {
+  margin: 10px 0;
 }
