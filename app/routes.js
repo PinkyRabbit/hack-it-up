@@ -6,7 +6,8 @@ const pages = require('./pages');
 const router = express.Router();
 
 router
-  .get('/', pages.homePage);
+  .get('/', pages.homePage)
+  .get('/category/:slug', pages.category);
 
 module.exports = (app) => {
   app.use('/', router);

@@ -20,4 +20,6 @@ node_modules/
 
 # images
 public/images/a/*.jpg
+public/images/b/*.jpg
 public/images/a/*.png
+public/images/b/*.png
