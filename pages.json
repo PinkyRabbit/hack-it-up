@@ -11,5 +11,12 @@
     "description": "Такой страницы не существует! Ошибка!",
     "h1": "Ой! Ошибка!",
     "image": "d/404.jpg"
+  },
+  "defaultArticle": {
+    "title": "Неизвестная страница",
+    "keywords": "",
+    "description": "",
+    "h1": "Забыл название",
+    "image": "c/no-image.jpg"
   }
 }

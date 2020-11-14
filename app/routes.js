@@ -7,7 +7,8 @@ const router = express.Router();
 
 router
   .get('/', pages.homePage)
-  .get('/category/:slug', pages.category);
+  .get('/:categorySlug', pages.category)
+  .get('/:categorySlug/:articleSlug', pages.article);
 
 module.exports = (app) => {
   app.use('/', router);

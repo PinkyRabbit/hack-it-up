@@ -1,0 +1,30 @@
+//- article.pug
+extends layout/main.pug
+
+block content
+  if !page.isPublished
+    .alert(class="alert-info" role='alert' style='margin-bottom: 10px')
+      span.glyphicon.glyphicon-info-sign(aria-hidden="true")
+      strong Внимание! Это превью!
+      br
+      | Статья пока что не опубликована. Для того чтобы её опубликовать нажмите
+      |  
+      spam.publish-me вот тут.
+  if page.tags && page.tags.length
+    - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
+    section.tags
+      each tag, index in page.tags
+        a(href="/tag/" + tag.slug title="Тег " + tag.name)
+          span(class="label label-" + tagColors[index])
+            span.glyphicon.glyphicon-tag(aria-hidden="true")
+            | #{tag.name}
+  .category-name-wrapper
+    a.category-name(href="/" + page.category.slug title=page.category.name)
+      span.glyphicon.glyphicon-folder-open(aria-hidden="true")
+      |  
+      | #{page.category.name}
+  if !page.content
+    h2 На этой странице пока ничего нет...
+    p Но обязательно появятся =)
+  else
+    article= page.content
