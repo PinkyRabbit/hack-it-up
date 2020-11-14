@@ -1,0 +1,9 @@
+//- login.pug
+extends layout/main.pug
+
+block content
+  .jumbotron
+    h2 Привет!
+    em Мы с тобой – люди Темной Стороны, а там, откуда мы пришли, мы всего лишь гости, странные незнакомцы, которых кое-как терпят…
+    hr
+    form(method="post" action="/login")

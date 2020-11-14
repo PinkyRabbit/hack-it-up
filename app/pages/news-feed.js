@@ -1,12 +1,21 @@
 const pagesOptions = require('../../pages.json');
 const articles = require('../articles.json');
 
+const reservedSlugs = [
+  'login',
+];
+
 module.exports = {
   homePage: (req, res) => res.render('news-feed', {
     page: pagesOptions.main,
     articles,
   }),
-  category: (req, res) => {
+  category: (req, res, next) => {
+    const { categorySlug } = req.params;
+    if (reservedSlugs.includes(categorySlug)) {
+      return next();
+    }
+
     const category = {
       name: 'Some category',
       slug: 'some-category',

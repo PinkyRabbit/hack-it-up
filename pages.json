@@ -18,5 +18,11 @@
     "description": "",
     "h1": "Забыл название",
     "image": "c/no-image.jpg"
+  },
+  "login": {
+    "title": "Вход...",
+    "description": "Нечего тебе тут делать, дорогой друг :)",
+    "h1": "Дорога в эхо",
+    "image": "d/login.jpg"
   }
 }
