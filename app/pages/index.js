@@ -9,4 +9,5 @@ module.exports = {
   category: newsFeed.category,
   article: article.getArticle,
   loginPage: other.loginPage,
+  loginRequest: other.loginRequest,
 };

@@ -7,3 +7,20 @@ block content
     em Мы с тобой – люди Темной Стороны, а там, откуда мы пришли, мы всего лишь гости, странные незнакомцы, которых кое-как терпят…
     hr
     form(method="post" action="/login")
+      input(type="hidden" name="_csrf" value= csrfToken || 'was not set')
+      .form-group
+        label(for="email") Email address
+        input.form-control(placeholder="Email" type="email")
+      .form-group
+        label(for="password") Password
+        input.form-control(placeholder="Password" type="password")
+      if recaptchaFront
+        .form-group
+          .g-recaptcha(data-sitekey=recaptchaFront)
+      else
+        .alert(class="alert-default" role='alert' style='margin-bottom: 10px')
+          span.glyphicon.glyphicon-info-sign(aria-hidden="true")
+          |  
+          strong Внимание! Креды для капчи не установлены!
+      button.btn.btn-danger.btn-lg.btn-block(type="submit") Войти
+
