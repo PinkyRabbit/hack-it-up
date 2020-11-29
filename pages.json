@@ -24,5 +24,11 @@
     "description": "Нечего тебе тут делать, дорогой друг :)",
     "h1": "Дорога в эхо",
     "image": "d/login.jpg"
+  },
+  "editArticle": {
+    "title": "Редактирование...",
+    "description": "",
+    "h1": "Редактор статьи",
+    "image": "d/admin.jpg"
   }
 }

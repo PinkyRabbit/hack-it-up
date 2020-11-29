@@ -1,5 +1,6 @@
 const pagesOptions = require('../../pages.json');
 const articles = require('../articles.json');
+const categories = require('../categories.json');
 
 const [article] = articles;
 
@@ -12,6 +13,15 @@ function getArticle(req, res) {
   res.render('article', { page });
 }
 
+function getEditArticlePage(req, res) {
+  res.render('edit-article', {
+    article,
+    categories,
+    page: pagesOptions.editArticle,
+  });
+}
+
 module.exports = {
   getArticle,
+  getEditArticlePage,
 };

@@ -13,10 +13,10 @@ function publicOutput(err, req, res) {
 function developmentOutput(err, req, res) {
   const page = {
     ...pages.error,
-    h1: `Ошибка ${err.status}`,
+    h1: `Ошибка ${err.status || 'без статуса (500)'}`,
     title: err.status,
   };
-  res.status(err.status).render('error-private', { page, err });
+  res.status(err.status || 500).render('error-private', { page, err });
 }
 
 // eslint-disable-next-line no-unused-vars

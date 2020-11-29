@@ -10,4 +10,9 @@ module.exports = {
     node: true,
   },
   rules: {},
+  globals: {
+    $: 'readonly',
+    Quill: 'readonly',
+    document: 'readonly',
+  },
 };

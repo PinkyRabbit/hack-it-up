@@ -1,0 +1,69 @@
+//- edit-article.pug
+extends layout/main.pug
+
+block content
+  - var h1 = article.h1 || "";
+  - var title = article.title || "";
+  - var description = article.description || "";
+  - var keywords = article.keywords || "";
+  - var content =article.content || "";
+  form(method="post" action="/fixme")
+    .form-group#h1
+      .input-group
+        span.input-group-addon h1
+        input.form-control(autocomplete="off" type="text" value=h1)
+    .form-group#title
+      .input-group
+        span.input-group-addon title
+        input.form-control(autocomplete="off" type="text" value=title)
+    .form-group#keywords
+      .input-group
+        span.input-group-addon keywords
+        input.form-control(autocomplete="off" type="text" value=keywords)
+    .form-group#description
+      .input-group
+        span.input-group-addon description
+        input.form-control(autocomplete="off" type="text" value=description)
+    if categories && categories.length
+      .form-group#category(data-base-value=article.category.slug)
+        label(for="category") Категория (сменить на input)
+        select.form-control
+          option(value='') - Please choose -
+          each category in categories
+            option(value=category.slug)= category.name
+    else
+      .alert(class="alert-warning" role='alert' style='margin-bottom: 10px')
+          span.glyphicon.glyphicon-info-sign(aria-hidden="true")
+          |  
+          strong Категории ещё не созданы.
+          |  
+          a(href="/categories" title="Управление категориями") Перейти к управлению категориями.
+          div class="form-group">
+    .form-group
+      label(for="tag") Теги
+      input.form-control(autocomplete="off" type="text" id="tag")
+    section.tags#tags-area
+      - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
+      each tag, index in article.tags
+        input.form-control(autocomplete="off" name="tags" type="hidden" value=tag.name)
+        span.tag-wrapper
+          span(class="label label-" + tagColors[index])
+            span.glyphicon.glyphicon-tag(aria-hidden="true")
+            | #{tag.name}
+    #editor-wrapper
+      #editor!= content
+      input#body(name="content" type="hidden" value=content)
+    .form-group
+      label(for="img-button") Изображение статьи
+      if article.image
+        button.btn.btn-default.btn-lg.btn-block#img-button(type="buttom") Заменить изображение
+        img.img-responsive(src="/images/a/" + article.image alt="Главное изображение статьи")
+      else
+        button.btn.btn-success.btn-lg.btn-block#img-button(type="buttom") Загрузить изображение
+      
+    button.btn.btn-danger.btn-lg.btn-block(type="submit") Войти
+  script(src="/js/edit-article.js")
+  script(src="//cdn.quilljs.com/1.3.6/quill.min.js")
+  link(rel='stylesheet' href="//cdn.quilljs.com/1.3.6/quill.snow.css")
+  link(rel='stylesheet' href="//cdn.quilljs.com/1.3.6/quill.bubble.css")
+  link(rel='stylesheet' href="//cdn.quilljs.com/1.3.6/quill.core.css")

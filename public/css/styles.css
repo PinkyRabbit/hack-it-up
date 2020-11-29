@@ -39,9 +39,15 @@ a{
   margin: 10px 0;
   line-height: 25px;
 }
-.tags a {
+.tags a,
+.tags span.tag-wrapper {
   margin-right: 5px;
 }
+.tags span.tag-wrapper:hover,
+.tags span.tag-wrapper:focus {
+  cursor: pointer;
+}
+
 .tags a:hover,
 .tags a:focus {
   text-decoration: none;
@@ -92,4 +98,10 @@ a.category-name{
 a.category-name:hover,
 a.category-name:focus{
   text-decoration: none;
+}
+.input-success {
+  background: #dff0d8;
+}
+#editor-wrapper {
+  margin: 20px 0;
 }
