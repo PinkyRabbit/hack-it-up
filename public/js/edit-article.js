@@ -133,7 +133,7 @@ function initTags() {
   });
 }
 
-$(document).ready(() => {
+document.addEventListener('DOMContentLoaded', () => {
   const inputs = Object.keys(inputOptions);
   inputs.forEach((name) => delayedInputValidation(name));
   selectCategory();

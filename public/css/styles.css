@@ -92,7 +92,8 @@ a{
 .category-name span{
     margin-right: 5px;
 }
-a.category-name{
+a.category-name,
+a.btn {
   color: #ffffff!important;
 }
 a.category-name:hover,

@@ -12,6 +12,7 @@ router
   .get('/:categorySlug', pages.category)
   .get('/:categorySlug/:articleSlug', pages.article)
   .get('/:categorySlug/:articleSlug/edit', pages.getEditArticlePage)
+  .post('/article/:id', pages.updateArticle)
   .get('/login', csrfProtection, pages.loginPage)
   .post('/login', csrfProtection, pages.loginRequest);
 

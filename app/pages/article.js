@@ -21,7 +21,17 @@ function getEditArticlePage(req, res) {
   });
 }
 
+function updateArticle(req, res) {
+  // const { id } = req.params;
+
+  const categorySlug = 'category-1';
+  const articleSlug = 'my-article';
+
+  res.redirect(`/${categorySlug}/${articleSlug}`);
+}
+
 module.exports = {
   getArticle,
   getEditArticlePage,
+  updateArticle,
 };

@@ -23,6 +23,10 @@ block content
       span.glyphicon.glyphicon-folder-open(aria-hidden="true")
       |  
       | #{page.category.name}
+    .pull-right
+      - var editSlug = "/" + page.category.slug + "/" + page.slug + "/edit"
+      a.btn.btn-info.btn-lg(href=editSlug role="button")
+        span.glyphicon.glyphicon-pencil(aria-hidden="true")
   if !page.content
     h2 На этой странице пока ничего нет...
     p Но обязательно появятся =)

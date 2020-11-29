@@ -1,5 +1,6 @@
 [
   {
+    "_id": "123",
     "category": {
       "name": "Category 1",
       "slug": "category-1"
