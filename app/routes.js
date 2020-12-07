@@ -3,16 +3,37 @@ const createError = require('http-errors');
 const csrf = require('csurf');
 
 const pages = require('./pages');
+const validators = require('./validators');
 
 const router = express.Router();
 const csrfProtection = csrf({ cookie: true });
+
+function mockSessionValidator(req, res, next) {
+  return next();
+}
 
 router
   .get('/', pages.homePage)
   .get('/:categorySlug', pages.category)
   .get('/:categorySlug/:articleSlug', pages.article)
-  .get('/:categorySlug/:articleSlug/edit', pages.getEditArticlePage)
-  .post('/article/:id', pages.updateArticle)
+  .get(
+    '/admin/article/:articleId',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    pages.getEditArticlePage,
+  )
+  .post(
+    '/admin/article/:articleId',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    pages.updateArticle,
+  )
+  .post(
+    '/admin/article/:articleId/image',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    pages.updateArticleImage,
+  )
   .get('/login', csrfProtection, pages.loginPage)
   .post('/login', csrfProtection, pages.loginRequest);
 

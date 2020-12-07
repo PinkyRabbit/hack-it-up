@@ -24,7 +24,7 @@ block content
       |  
       | #{page.category.name}
     .pull-right
-      - var editSlug = "/" + page.category.slug + "/" + page.slug + "/edit"
+      - var editSlug = "/admin/article/" + page._id
       a.btn.btn-info.btn-lg(href=editSlug role="button")
         span.glyphicon.glyphicon-pencil(aria-hidden="true")
   if !page.content

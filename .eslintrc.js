@@ -14,5 +14,6 @@ module.exports = {
     $: 'readonly',
     Quill: 'readonly',
     document: 'readonly',
+    FileReader: 'readonly',
   },
 };

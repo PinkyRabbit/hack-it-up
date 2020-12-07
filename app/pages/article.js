@@ -22,16 +22,20 @@ function getEditArticlePage(req, res) {
 }
 
 function updateArticle(req, res) {
-  // const { id } = req.params;
+  const { articleId } = req.params;
 
-  const categorySlug = 'category-1';
-  const articleSlug = 'my-article';
+  res.redirect(`/admin/article/${articleId}`);
+}
 
-  res.redirect(`/${categorySlug}/${articleSlug}`);
+function updateImage(req, res) {
+  const { articleId } = req.params;
+
+  res.redirect(`/admin/article/${articleId}`);
 }
 
 module.exports = {
   getArticle,
   getEditArticlePage,
   updateArticle,
+  updateImage,
 };

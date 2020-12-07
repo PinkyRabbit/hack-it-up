@@ -118,6 +118,7 @@ function addEditor() {
 
   const container = document.getElementById('editor');
   const editor = new Quill(container, editorSettings);
+  return editor;
 }
 
 function bidTagRemove(el) {
@@ -133,10 +134,66 @@ function initTags() {
   });
 }
 
+function onImageSelect() {
+  if (this.files && this.files[0]) {
+    const [file] = this.files;
+    if (!file.type.match(/image.*/)) {
+      return false;
+    }
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      $('#send-image-form').submit();
+    };
+
+    reader.readAsDataURL(file); // convert to base64 string
+  }
+}
+
+function initImage() {
+  $('#img-button').on('click', () => {
+    $('#image-file').trigger('click');
+  });
+
+  $('#image-file').change(onImageSelect);
+}
+
+function save(editor) {
+  const content = editor.container.firstChild.innerHTML;
+  const form = $('#edit-article-form').serializeArray();
+  console.log('------')
+  $.each(form, (i) => {
+    console.log(form[i]);
+    if (form[i].name === 'content') {
+      form.splice(i, 1);
+      return false;
+    }
+  });
+  form.push({ name: 'content', value: content });
+  // $.ajax({
+  //   type: 'POST',
+  //   url: '/admin/news/draft?_csrf=' + data.csrf + '&id=' + data.id,
+  //   data: form,
+  //   dataType: 'json',
+  //   success: () => {
+  //     console.log(`Autosave ${(new Date()).toLocaleString()}`);
+  //   },
+  //   error: (err) => {
+  //     console.error(err);
+  //   },
+  // });
+}
+
+function autosave(editor) {
+  setInterval(() => save(editor), 6000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const inputs = Object.keys(inputOptions);
   inputs.forEach((name) => delayedInputValidation(name));
   selectCategory();
-  addEditor();
   initTags();
+  initImage();
+  const editor = addEditor();
+  autosave(editor);
 });
