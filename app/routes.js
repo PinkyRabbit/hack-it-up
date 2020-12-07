@@ -14,8 +14,17 @@ function mockSessionValidator(req, res, next) {
 
 router
   .get('/', pages.homePage)
-  .get('/:categorySlug', pages.category)
-  .get('/:categorySlug/:articleSlug', pages.article)
+  .get(
+    '/:categorySlug',
+    validators.categorySlugValidator,
+    pages.category,
+  )
+  .get(
+    '/:categorySlug/:articleSlug',
+    validators.articleAndCategorySlugsValidator,
+    pages.article,
+  )
+  .get('/unknown/:articleSlug', pages.article)
   .get(
     '/admin/article/:articleId',
     mockSessionValidator,
@@ -30,6 +39,12 @@ router
   )
   .post(
     '/admin/article/:articleId/image',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    pages.updateArticleImage,
+  )
+  .post(
+    '/admin/article/:articleId/publish',
     mockSessionValidator,
     validators.articleIdValidator,
     pages.updateArticleImage,
