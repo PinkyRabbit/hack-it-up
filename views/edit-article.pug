@@ -8,6 +8,7 @@ block content
   - var keywords = article.keywords || "";
   - var content =article.content || "";
   form(method="POST" action="/article/" + article._id id="edit-article-form")
+    input(type="hidden" id="_id" value=article._id)
     .form-group#h1
       .input-group
         span.input-group-addon h1

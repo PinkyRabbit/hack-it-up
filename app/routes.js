@@ -31,11 +31,17 @@ router
     validators.articleIdValidator,
     pages.getEditArticlePage,
   )
+  .put(
+    '/admin/article/:articleId',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    pages.autosaveArticle,
+  )
   .post(
     '/admin/article/:articleId',
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.updateArticle,
+    pages.saveArticle,
   )
   .post(
     '/admin/article/:articleId/image',
@@ -43,11 +49,11 @@ router
     validators.articleIdValidator,
     pages.updateArticleImage,
   )
-  .post(
+  .get(
     '/admin/article/:articleId/publish',
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.updateArticleImage,
+    pages.publishArticle,
   )
   .get('/login', csrfProtection, pages.loginPage)
   .post('/login', csrfProtection, pages.loginRequest);

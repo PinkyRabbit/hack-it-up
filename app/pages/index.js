@@ -14,6 +14,8 @@ module.exports = {
   loginPage: other.loginPage,
   loginRequest: other.loginRequest,
   getEditArticlePage: article.getEditArticlePage,
-  updateArticle: article.updateArticle,
+  autosaveArticle: article.autosaveAtricle,
+  saveArticle: article.saveArticle,
   updateArticleImage: article.updateImage,
+  publishArticle: article.publish,
 };

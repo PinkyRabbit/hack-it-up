@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
+const bodyParser = require('body-parser');
 
 const initSession = require('./middlewares/session');
 const initFlash = require('./middlewares/flash');
@@ -21,6 +22,8 @@ const rootDirectory = path.resolve(__dirname, '..');
 app.use(express.static(path.join(rootDirectory, 'public')));
 app.set('view engine', 'pug');
 app.set('views', path.join(rootDirectory, 'views'));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+app.use(bodyParser.json());
 
 initSession(app);
 initFlash(app);

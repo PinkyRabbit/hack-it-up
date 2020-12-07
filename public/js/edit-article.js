@@ -161,27 +161,26 @@ function initImage() {
 function save(editor) {
   const content = editor.container.firstChild.innerHTML;
   const form = $('#edit-article-form').serializeArray();
-  console.log('------')
   $.each(form, (i) => {
-    console.log(form[i]);
     if (form[i].name === 'content') {
       form.splice(i, 1);
       return false;
     }
   });
+  const id = $('#_id').val();
   form.push({ name: 'content', value: content });
-  // $.ajax({
-  //   type: 'POST',
-  //   url: '/admin/news/draft?_csrf=' + data.csrf + '&id=' + data.id,
-  //   data: form,
-  //   dataType: 'json',
-  //   success: () => {
-  //     console.log(`Autosave ${(new Date()).toLocaleString()}`);
-  //   },
-  //   error: (err) => {
-  //     console.error(err);
-  //   },
-  // });
+  $.ajax({
+    type: 'PUT',
+    url: `/admin/article/${id}`,
+    data: form,
+    dataType: 'json',
+    success: () => {
+      console.log(`Autosave ${(new Date()).toLocaleString()}`);
+    },
+    error: (err) => {
+      console.error(err);
+    },
+  });
 }
 
 function autosave(editor) {

@@ -27,6 +27,8 @@ block content
       - var editSlug = "/admin/article/" + page._id
       a.btn.btn-info.btn-lg(href=editSlug role="button")
         span.glyphicon.glyphicon-pencil(aria-hidden="true")
+      a.btn.btn-danger.btn-lg(href=editSlug + '/publish' role="button")
+        span.glyphicon.glyphicon-floppy-disk(aria-hidden="true")
   if !page.content
     h2 На этой странице пока ничего нет...
     p Но обязательно появятся =)
