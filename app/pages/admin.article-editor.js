@@ -1,0 +1,128 @@
+const express = require('express');
+const createError = require('http-errors');
+
+const validators = require('../validators');
+const { Article } = require('../factories');
+const { mongodbId, ArticleCollection } = require('../database');
+
+const pagesOptions = require('../../pages.json');
+const categories = require('../categories.json');
+
+/**
+ * Creates a new empty article and redirect to edit page
+ */
+async function createArticle(req, res) {
+  const emptyArticle = new Article({});
+  const newArticle = await ArticleCollection.insert(emptyArticle);
+  const redirectUrl = `/admin/article/${newArticle._id}`;
+  return res.redirect(redirectUrl);
+}
+
+/**
+ * To display edit article page. If article was published status will changes to unpublised
+ */
+async function getEditArticlePage(req, res, next) {
+  const { articleId } = req.params;
+  const _id = mongodbId(articleId);
+  const article = await ArticleCollection.findOne({ _id });
+  if (!article) {
+    return next(createError(404, 'Страница не существует'));
+  }
+  if (article.isPublished) {
+    await ArticleCollection.update({ _id }, { $set: { isPublished: false } });
+  }
+  return res.render('edit-article', {
+    article,
+    categories,
+    page: pagesOptions.editArticle,
+  });
+}
+
+/**
+ * Construct new article from body and updates it in database
+ */
+async function updateArticle(plainArticleObject) {
+  const article = new Article(plainArticleObject);
+  console.log(article);
+  return Promise.resolve();
+}
+
+/**
+ * Method for autosave article (no redirect)
+ */
+async function autosaveArticle(req, res) {
+  // const { articleId } = req.params;
+  await updateArticle(req.body);
+  res.send({ success: true });
+}
+
+/**
+ * Method for saving article and redirect to preview page
+ */
+async function saveArticle(req, res) {
+  const { articleId } = req.params;
+  await updateArticle(req.body);
+  // @FIXME: incorrect redirect!
+  res.redirect(`/admin/article/${articleId}`);
+}
+
+function updateImage(req, res) {
+  const { articleId } = req.params;
+
+  res.redirect(`/admin/article/${articleId}`);
+}
+
+function publish(req, res) {
+  const { articleId } = req.params;
+
+  res.redirect(`/admin/article/${articleId}`);
+}
+
+// @NOTE: should be replaced with correct method
+function mockSessionValidator(req, res, next) {
+  return next();
+}
+
+/**
+ * Create and export edit article router
+ */
+const adminArticleRouter = express.Router();
+
+adminArticleRouter
+  .get(
+    '/add',
+    mockSessionValidator,
+    createArticle,
+  )
+  .get(
+    '/:articleId',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    getEditArticlePage,
+  )
+  .put(
+    '/:articleId',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    autosaveArticle,
+  )
+  .post(
+    '/:articleId',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    saveArticle,
+  )
+  .post(
+    '/:articleId/image',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    updateImage,
+  )
+  .get(
+    '/:articleId/publish',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    publish,
+  );
+
+module.exports = adminArticleRouter;

@@ -26,7 +26,7 @@ block content
         span.input-group-addon description
         input.form-control(autocomplete="off" type="text" name="description" value=description)
     if categories && categories.length
-      .form-group#category(data-base-value=article.category.slug)
+      .form-group#category(data-base-value=article.category ? article.category.slug : "")
         label(for="category") Категория (сменить на input)
         select.form-control
           option(value='') - Please choose -

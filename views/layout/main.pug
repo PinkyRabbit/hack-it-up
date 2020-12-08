@@ -10,7 +10,7 @@ html(lang='ru')
     if page.title
       title= "hack-it-up.ru — " + page.title 
     else
-      title "hack-it-up.ru — unknown page"
+      title hack-it-up.ru — Unknown page
     if page.description
       meta(name='description' content=page.description)
     if page.keywords
@@ -26,6 +26,32 @@ html(lang='ru')
       script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
   body
     .container
+      nav.navbar.navbar-default.navbar-static-top
+        .navbar-header
+          button.navbar-toggle.collapsed(data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href="/" title="На главную")
+            img(src="/images/c/logo-min.jpg" alt="logo min")
+        .navbar-collapse.collapse#navbar
+          ul.nav.navbar-nav
+            li.dropdown
+              a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false")
+                | По категориям 
+                span.caret
+              ul.dropdown-menu.cats-menu
+                li
+                  a(href="#")
+                    span.glyphicon.glyphicon-folder-open(aria-hidden="true")
+                    | Тестовая категория
+            li
+              a(href="/about-me" title="Обо мне") Обо мне
+          ul.nav.navbar-nav.pull-right
+            li
+              a(href="/admin/article/add" title="Создать статью")
+                span.glyphicon.glyphicon-plus(aria-hidden="true")
       header
         div
           if page.image

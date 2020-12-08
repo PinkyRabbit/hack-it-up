@@ -106,3 +106,25 @@ a.category-name:focus{
 #editor-wrapper {
   margin: 20px 0;
 }
+.navbar{
+  margin-bottom: 0;
+}
+.navbar-brand{
+  padding: 0;
+}
+.navbar-default{
+  background-color: #333333;
+  border-color: #333333;
+}
+.navbar-default .navbar-nav>li>a{
+  color: #f2f2f2;
+  font-size: 17px;
+}
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover {
+  background-color: #dddddd;
+  color: black;
+}
+.navbar-default .navbar-brand {
+    color: #ffa0fc;
+}

@@ -1,6 +1,6 @@
-const errorHandler = require('./error');
-const newsFeed = require('./news-feed');
-const article = require('./article');
+const publicPagesRouter = require('./public-pages');
+const editArticleRouter = require('./admin.article-editor');
+const errorHandler = require('./error-handler');
 const other = require('./other');
 
 // @FIXME: show categories without description!
@@ -8,14 +8,8 @@ const other = require('./other');
 
 module.exports = {
   errorHandler,
-  homePage: newsFeed.homePage,
-  category: newsFeed.category,
-  article: article.getArticle,
   loginPage: other.loginPage,
   loginRequest: other.loginRequest,
-  getEditArticlePage: article.getEditArticlePage,
-  autosaveArticle: article.autosaveAtricle,
-  saveArticle: article.saveArticle,
-  updateArticleImage: article.updateImage,
-  publishArticle: article.publish,
+  publicPagesRouter,
+  editArticleRouter,
 };

@@ -9,7 +9,9 @@ module.exports = {
   env: {
     node: true,
   },
-  rules: {},
+  rules: {
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
+  },
   globals: {
     $: 'readonly',
     Quill: 'readonly',
