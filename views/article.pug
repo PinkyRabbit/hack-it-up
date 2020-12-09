@@ -18,19 +18,20 @@ block content
           span(class="label label-" + tagColors[index])
             span.glyphicon.glyphicon-tag(aria-hidden="true")
             | #{tag.name}
-  .category-name-wrapper
-    a.category-name(href="/" + page.category.slug title=page.category.name)
-      span.glyphicon.glyphicon-folder-open(aria-hidden="true")
-      |  
-      | #{page.category.name}
-    .pull-right
-      - var editSlug = "/admin/article/" + page._id
-      a.btn.btn-info.btn-lg(href=editSlug role="button")
-        span.glyphicon.glyphicon-pencil(aria-hidden="true")
-      a.btn.btn-danger.btn-lg(href=editSlug + '/publish' role="button")
-        span.glyphicon.glyphicon-floppy-disk(aria-hidden="true")
+  if page.category
+    .category-name-wrapper
+      a.category-name(href="/" + page.category.slug title=page.category.name)
+        span.glyphicon.glyphicon-folder-open(aria-hidden="true")
+        |  
+        | #{page.category.name}
+      .pull-right
+        - var editSlug = "/admin/article/" + page._id
+        a.btn.btn-info.btn-lg(href=editSlug role="button")
+          span.glyphicon.glyphicon-pencil(aria-hidden="true")
+        a.btn.btn-danger.btn-lg(href=editSlug + '/publish' role="button")
+          span.glyphicon.glyphicon-floppy-disk(aria-hidden="true")
   if !page.content
     h2 На этой странице пока ничего нет...
     p Но обязательно появятся =)
   else
-    article= page.content
+    article!= page.content

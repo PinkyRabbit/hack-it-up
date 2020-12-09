@@ -1,4 +1,7 @@
 const express = require('express');
+const marked = require('marked');
+const fs = require('fs').promises;
+const path = require('path');
 
 const validators = require('../validators');
 
@@ -34,6 +37,7 @@ function getArticle(req, res) {
 const reservedSlugs = [
   'login',
   'unpublished',
+  'about-me',
 ];
 
 /**
@@ -74,13 +78,48 @@ async function getUnpublished(req, res) {
   return res.render('news-feed', { page, articles, isUnpublished: true });
 }
 
+/**
+ * To display static About me page.
+ */
+async function aboutMePage(res) {
+  const aboutMeFile = path.join(__dirname, '../../static/about-me.md');
+  const aboutMeMarkup = await fs.readFile(aboutMeFile, 'utf-8');
+  const page = {
+    title: 'Introduce',
+    h1: 'Пару слов обо мне',
+    keywords: 'NodeJS, разработчик, резюме',
+    description: 'Пару слов обо мне. Эта страничка оформлена в виде "рассказа" о себе и не несёт рекламный характер. Это не CV.',
+    image: '/d/about-me.jpg',
+    content: marked(aboutMeMarkup),
+  };
+  res.render('article', { page });
+}
+
+/**
+ * Method to get static pages with markdown markup.
+ */
+async function getStatic(req, res, next) {
+  const { staticPageSlug } = req.params;
+
+  let staticPageFunction;
+  switch (staticPageSlug) {
+    case 'about-me':
+      staticPageFunction = () => aboutMePage(res);
+      break;
+    default:
+      return next();
+  }
+
+  return await staticPageFunction();
+}
+
 // @NOTE: should be replaced with correct method
 function mockSessionValidator(req, res, next) {
   return next();
 }
 
 /**
- * Create and export public pages router
+ * Create and export public pages router.
  */
 const publicPagesRouter = express.Router();
 
@@ -100,6 +139,10 @@ publicPagesRouter
     '/:categorySlug/:articleSlug',
     validators.articleAndCategorySlugsValidator,
     getArticle,
+  )
+  .get(
+    '/:staticPageSlug',
+    getStatic,
   );
 
 module.exports = publicPagesRouter;

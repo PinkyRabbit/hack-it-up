@@ -11,6 +11,7 @@ module.exports = {
   },
   rules: {
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
+    'no-return-await': 'off',
   },
   globals: {
     $: 'readonly',
