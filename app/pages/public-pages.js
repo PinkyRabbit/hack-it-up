@@ -3,9 +3,10 @@ const express = require('express');
 const validators = require('../validators');
 
 const pagesOptions = require('../../pages.json');
-const articles = require('../articles.json');
+const fakeAritcles = require('../articles.json');
+const { ArticleCollection } = require('../database');
 
-const [mockArticle] = articles;
+const [mockArticle] = fakeAritcles;
 
 /**
  * Get home page / news feed
@@ -13,7 +14,7 @@ const [mockArticle] = articles;
 function getHomePage(req, res) {
   return res.render('news-feed', {
     page: pagesOptions.main,
-    articles,
+    articles: fakeAritcles,
   });
 }
 
@@ -32,7 +33,9 @@ function getArticle(req, res) {
 // @FIXME: should be in constants
 const reservedSlugs = [
   'login',
+  'unpublished',
 ];
+
 /**
  * Get all articles in a category
  */
@@ -41,7 +44,6 @@ function getCategory(req, res, next) {
   if (reservedSlugs.includes(categorySlug)) {
     return next();
   }
-
   const category = {
     name: 'Some category',
     slug: 'some-category',
@@ -49,13 +51,32 @@ function getCategory(req, res, next) {
     image: '1.jpg',
   };
   const page = {
-    ...pagesOptions.main,
     h1: category.name,
     title: category.name,
     descritpion: category.description,
     image: category.image ? `/b/${category.image}` : '/c/no-image.jpg',
   };
-  return res.render('news-feed', { page, articles });
+  return res.render('news-feed', { page, articles: fakeAritcles });
+}
+
+/**
+ * Get all unpublished articles
+ */
+async function getUnpublished(req, res) {
+  const articles = await ArticleCollection.find({});
+  const page = {
+    ...pagesOptions.main,
+    h1: 'Неопубликованное',
+    title: 'Неопубликованное',
+    descritpion: 'Неопубликованные статьи сайта',
+    image: '/d/unpublished.jpg',
+  };
+  return res.render('news-feed', { page, articles, isUnpublished: true });
+}
+
+// @NOTE: should be replaced with correct method
+function mockSessionValidator(req, res, next) {
+  return next();
 }
 
 /**
@@ -69,6 +90,11 @@ publicPagesRouter
     '/:categorySlug',
     validators.categorySlugValidator,
     getCategory,
+  )
+  .get(
+    '/unpublished',
+    mockSessionValidator,
+    getUnpublished,
   )
   .get(
     '/:categorySlug/:articleSlug',

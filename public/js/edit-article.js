@@ -184,6 +184,7 @@ function save(editor) {
 }
 
 function autosave(editor) {
+  // @TODO: add auto trim
   setInterval(() => save(editor), 6000);
 }
 

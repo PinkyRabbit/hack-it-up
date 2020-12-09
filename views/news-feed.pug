@@ -7,11 +7,11 @@ block content
     p Но обязательно появятся =)
   else
     each article in articles
-      - var url = "/" + article.category.slug +"/" + article.slug;
+      - var url = isUnpublished ? "/admin/article/" + article._id : "/" + article.category.slug +"/" + article.slug;
       - var imgSrc = article.image ? "/images/a/" + article.image : "/images/c/no-image.jpg";
       article.news-feed
         h2
-          a(href=url)= article.h1
+          a(href=url)= article.h1 || "Без заголовка..."
         if article.tags && article.tags.length
           - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
           section.tags
@@ -21,8 +21,8 @@ block content
                   span.glyphicon.glyphicon-tag(aria-hidden="true")
                   |  
                   | #{tag.name}
-        img.img-responsive.img-thumbnail(src=imgSrc alt=article.title)
-        p.description= article.description
+        img.img-responsive.img-thumbnail(src=imgSrc alt=article.title || "")
+        p.description= article.description || "В описании пусто..."
         ol.breadcrumb
           li
             span.glyphicon.glyphicon-calendar(aria-hidden="true")
@@ -30,5 +30,12 @@ block content
           li
             span.glyphicon.glyphicon-folder-open(aria-hidden="true")
             |  
-            a(href="/" + article.category.slug title=article.category.name)= article.category.name
+            if article.category
+              a(href="/" + article.category.slug title=article.category.name)= article.category.name
+            else
+              | Категория не указана
+          li
+            span.glyphicon.glyphicon-trash(aria-hidden="true")
+            |  
+            a(href="/admin/article/" + article._id + "/delete" title="Удалить статью" onclick="return confirm('Точно удаляем?')") Удалить статью
         hr

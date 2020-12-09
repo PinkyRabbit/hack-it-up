@@ -13,6 +13,10 @@ const categories = require('../categories.json');
  */
 async function createArticle(req, res) {
   const emptyArticle = new Article({});
+  const date = (new Date()).toISOString();
+  emptyArticle.isPublished = false;
+  emptyArticle.createdAt = date;
+  emptyArticle.updatedAt = date;
   const newArticle = await ArticleCollection.insert(emptyArticle);
   const redirectUrl = `/admin/article/${newArticle._id}`;
   return res.redirect(redirectUrl);
@@ -41,9 +45,10 @@ async function getEditArticlePage(req, res, next) {
 /**
  * Construct new article from body and updates it in database
  */
-async function updateArticle(plainArticleObject) {
+async function updateArticle(articleId, plainArticleObject) {
   const article = new Article(plainArticleObject);
-  console.log(article);
+  article.updatedAt = (new Date()).toISOString();
+  await ArticleCollection.update({ _id: articleId }, { $set: article });
   return Promise.resolve();
 }
 
@@ -51,8 +56,8 @@ async function updateArticle(plainArticleObject) {
  * Method for autosave article (no redirect)
  */
 async function autosaveArticle(req, res) {
-  // const { articleId } = req.params;
-  await updateArticle(req.body);
+  const { articleId } = req.params;
+  await updateArticle(articleId, req.body);
   res.send({ success: true });
 }
 
@@ -76,6 +81,16 @@ function publish(req, res) {
   const { articleId } = req.params;
 
   res.redirect(`/admin/article/${articleId}`);
+}
+
+/**
+ * To delete article
+ */
+async function deleteAnArticle(req, res) {
+  const { articleId } = req.params;
+  await ArticleCollection.remove({ _id: articleId });
+  req.flash('success', 'Статья успешно удалена.');
+  res.redirect('back');
 }
 
 // @NOTE: should be replaced with correct method
@@ -123,6 +138,12 @@ adminArticleRouter
     mockSessionValidator,
     validators.articleIdValidator,
     publish,
+  )
+  .get(
+    '/:articleId/delete',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    deleteAnArticle,
   );
 
 module.exports = adminArticleRouter;

@@ -2,6 +2,8 @@ const { param, validationResult } = require('express-validator');
 
 const createError = require('http-errors');
 
+const slugRegex = /^[a-z0-9]+(-[a-z0-9]+)*?$/;
+
 /**
  * Throw 404 error if wrong slug format
  */
@@ -16,12 +18,12 @@ function pageNotFoundIfInvalid(req, res, next) {
 
 module.exports = {
   articleAndCategorySlugsValidator: [
-    param('articleSlug').trim().matches(/^[a-z0-9]+(-[a-z0-9]+)*?$/),
-    param('categorySlug').trim().matches(/^[a-z0-9]+(-[a-z0-9]+)*?$/),
+    param('articleSlug').trim().matches(slugRegex),
+    param('categorySlug').trim().matches(slugRegex),
     pageNotFoundIfInvalid,
   ],
   categorySlugValidator: [
-    param('categorySlug').trim().matches(/^[a-z0-9]+(-[a-z0-9]+)*?$/),
+    param('categorySlug').trim().matches(slugRegex),
     pageNotFoundIfInvalid,
   ],
 };
