@@ -128,3 +128,7 @@ a.category-name:focus{
 .navbar-default .navbar-brand {
     color: #ffa0fc;
 }
+a.btn-default{
+    color: #31708f!important;
+
+}

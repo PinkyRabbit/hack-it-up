@@ -7,7 +7,7 @@ block content
     p Но обязательно появятся =)
   else
     each article in articles
-      - var url = isUnpublished ? "/admin/article/" + article._id : "/" + article.category.slug +"/" + article.slug;
+      - var url = isUnpublished ? "/article/" + article._id : "/" + article.category.slug +"/" + article.slug;
       - var imgSrc = article.image ? "/images/a/" + article.image : "/images/c/no-image.jpg";
       article.news-feed
         h2

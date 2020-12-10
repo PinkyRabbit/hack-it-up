@@ -49,7 +49,7 @@ async function updateArticle(articleId, plainArticleObject) {
   const article = new Article(plainArticleObject);
   article.updatedAt = (new Date()).toISOString();
   await ArticleCollection.update({ _id: articleId }, { $set: article });
-  return Promise.resolve();
+  return article;
 }
 
 /**
@@ -66,9 +66,13 @@ async function autosaveArticle(req, res) {
  */
 async function saveArticle(req, res) {
   const { articleId } = req.params;
-  await updateArticle(req.body);
-  // @FIXME: incorrect redirect!
-  res.redirect(`/admin/article/${articleId}`);
+  const updatedFields = await updateArticle(req.body);
+  let redirectUrl = `/admin/article/${articleId}`;
+  const { slug, categoryId } = updatedFields;
+  if (slug && categoryId) {
+    redirectUrl = `/${categoryId}/${slug}`;
+  }
+  res.redirect(`/admin/article/${redirectUrl}`);
 }
 
 function updateImage(req, res) {

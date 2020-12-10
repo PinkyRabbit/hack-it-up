@@ -9,7 +9,7 @@ block content
       br
       | Статья пока что не опубликована. Для того чтобы её опубликовать нажмите
       |  
-      spam.publish-me вот тут.
+      a.btn.btn-default(href=editSlug + '/publish' role="button") вот тут
   if page.tags && page.tags.length
     - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
     section.tags
@@ -18,18 +18,20 @@ block content
           span(class="label label-" + tagColors[index])
             span.glyphicon.glyphicon-tag(aria-hidden="true")
             | #{tag.name}
-  if page.category
-    .category-name-wrapper
-      a.category-name(href="/" + page.category.slug title=page.category.name)
-        span.glyphicon.glyphicon-folder-open(aria-hidden="true")
-        |  
-        | #{page.category.name}
-      .pull-right
-        - var editSlug = "/admin/article/" + page._id
-        a.btn.btn-info.btn-lg(href=editSlug role="button")
-          span.glyphicon.glyphicon-pencil(aria-hidden="true")
-        a.btn.btn-danger.btn-lg(href=editSlug + '/publish' role="button")
-          span.glyphicon.glyphicon-floppy-disk(aria-hidden="true")
+  .category-name-wrapper
+    - var categoryName = page.category ? page.category.name : "Категория не выбрана";
+    - var categoryHref = page.category ? "/" + page.category.slug : "#";
+    a.category-name(href=categoryHref title=categoryName)
+      span.glyphicon.glyphicon-folder-open(aria-hidden="true")
+      |  
+      | #{categoryName}
+    .pull-right
+      if !page.isPublished
+        a.btn.btn-default.btn-lg(href="/admin/article/" + page._id + "/delete" title="Удалить статью" onclick="return confirm('Точно удаляем?')")
+          span.glyphicon.glyphicon-trash(aria-hidden="true")
+      - var editSlug = "/admin/article/" + page._id
+      a.btn.btn-info.btn-lg(href=editSlug role="button")
+        span.glyphicon.glyphicon-pencil(aria-hidden="true")
   if !page.content
     h2 На этой странице пока ничего нет...
     p Но обязательно появятся =)

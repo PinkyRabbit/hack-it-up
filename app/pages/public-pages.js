@@ -2,14 +2,13 @@ const express = require('express');
 const marked = require('marked');
 const fs = require('fs').promises;
 const path = require('path');
+const createError = require('http-errors');
 
 const validators = require('../validators');
 
 const pagesOptions = require('../../pages.json');
 const fakeAritcles = require('../articles.json');
 const { ArticleCollection } = require('../database');
-
-const [mockArticle] = fakeAritcles;
 
 /**
  * Get home page / news feed
@@ -22,15 +21,28 @@ function getHomePage(req, res) {
 }
 
 /**
- * Get single article page
+ * Get article by slug.
  */
-function getArticle(req, res) {
-  const page = {
-    ...pagesOptions.defaultArticle,
-    ...mockArticle,
-    image: `/a/${mockArticle.image}`,
-  };
-  res.render('article', { page });
+async function getArticleBySlug(req, res, next) {
+  const { articleSlug } = req.params;
+  const article = await ArticleCollection.findOne({ slug: articleSlug });
+  if (!article) {
+    // should return next cuz article could be taken also by id
+    return next();
+  }
+  return res.render('article', { page: article });
+}
+
+/**
+ * Get article by article id.
+ */
+async function getArticleById(req, res, next) {
+  const { articleId } = req.params;
+  const article = await ArticleCollection.findOne({ _id: articleId });
+  if (!article) {
+    return next(createError(404, 'Страница не существует'));
+  }
+  return res.render('article', { page: article });
 }
 
 // @FIXME: should be in constants
@@ -38,6 +50,7 @@ const reservedSlugs = [
   'login',
   'unpublished',
   'about-me',
+  'article',
 ];
 
 /**
@@ -138,7 +151,13 @@ publicPagesRouter
   .get(
     '/:categorySlug/:articleSlug',
     validators.articleAndCategorySlugsValidator,
-    getArticle,
+    getArticleBySlug,
+  )
+  .get(
+    '/article/:articleId',
+    mockSessionValidator,
+    validators.articleIdValidator,
+    getArticleById,
   )
   .get(
     '/:staticPageSlug',

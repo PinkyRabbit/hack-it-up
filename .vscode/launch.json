@@ -5,21 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "nodemon",
-      "runtimeExecutable": "nodemon",
-      "program": "${workspaceFolder}/app/index.js",
-      "restart": true,
-      "console": "integratedTerminal",
-      "outputCapture": "std",
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*.js",
-        "${workspaceRoot}/node_modules/**/*.ts"
-      ],
-      "env": {
-        "NODE_ENV": "development",
-      }
+        "name": "Launch via nodemon",
+        "type": "node",
+        "request": "launch",
+        "protocol": "inspector",
+        "cwd": "${workspaceRoot}",
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/nodemon",
+        "runtimeArgs": [
+          "--exitcrash",
+        ],
+        "program": "${workspaceRoot}/app/index.js",
+        "restart": true,
+        "skipFiles": [
+          "${workspaceRoot}/node_modules/**",
+          "${workspaceRoot}/<node_internals>/**"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "env": {
+          "NODE_ENV": "development"
+        }
     }
   ]
 }
