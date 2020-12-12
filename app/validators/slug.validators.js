@@ -1,6 +1,7 @@
 const { param, validationResult } = require('express-validator');
-
 const createError = require('http-errors');
+
+const { reservedCategorySlugs } = require('../routes');
 
 const slugRegex = /^[a-z0-9]+(-[a-z0-9]+)*?$/;
 
@@ -19,7 +20,9 @@ function pageNotFoundIfInvalid(req, res, next) {
 module.exports = {
   articleAndCategorySlugsValidator: [
     param('articleSlug').trim().matches(slugRegex),
-    param('categorySlug').trim().matches(slugRegex),
+    param('categorySlug').trim().matches(slugRegex)
+      .not()
+      .isIn(reservedCategorySlugs),
     pageNotFoundIfInvalid,
   ],
   categorySlugValidator: [

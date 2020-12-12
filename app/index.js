@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const initSession = require('./middlewares/session');
 const initFlash = require('./middlewares/flash');
 const useCompression = require('./middlewares/compression');
-const initRoutes = require('./routes');
+const { initRoutes } = require('./routes');
 
 const app = express();
 

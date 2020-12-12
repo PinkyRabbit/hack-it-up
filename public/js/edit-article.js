@@ -143,8 +143,9 @@ function onImageSelect() {
     const reader = new FileReader();
 
     reader.onload = () => {
-      $('#img-preview').attr('src', reader.result);
-      $('#img-preview').attr('style', '');
+      // $('#img-preview').attr('src', reader.result);
+      $('#img-spinner').attr('style', '');
+      $('#img-preview').attr('style', 'display:none');
       $('#send-image-form').submit();
     };
 

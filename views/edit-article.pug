@@ -7,7 +7,7 @@ block content
   - var description = article.description || "";
   - var keywords = article.keywords || "";
   - var content =article.content || "";
-  form(method="POST" action="/article/" + article._id id="edit-article-form")
+  form(method="POST" action="/admin/article/" + article._id id="edit-article-form")
     input(type="hidden" id="_id" value=article._id)
     .form-group#h1
       .input-group
@@ -55,14 +55,18 @@ block content
       #editor!= content
       input#body(name="content" type="hidden" value=content)
     .form-group
+      input#body(name="image" type="hidden" value=article.image)
+      #img-spinner(style="display: none")
+        .lds-spinner
+          - for (var i = 0; i < 12; ++i) {
+            div
+          - }
       label(for="img-button") Изображение статьи
-      - var imageStyle = article.image ? "" : "display: none"
-      img.img-responsive#img-preview(src="/images/" + article.image alt="Главное изображение статьи" style=imageStyle)
       if article.image
+        img.img-responsive#img-preview(src="/images/" + article.image alt="Главное изображение статьи")
         button.btn.btn-default.btn-lg.btn-block#img-button(type="button") Заменить изображение
       else
         button.btn.btn-success.btn-lg.btn-block#img-button(type="button") Загрузить изображение
-      input#body(name="image" type="hidden" value=article.image)
     button.btn.btn-danger.btn-lg.btn-block(type="submit") Перейти к просмотру
   
   form(method="POST" action="/admin/article/" + article._id + '/image' id="send-image-form" enctype="multipart/form-data")

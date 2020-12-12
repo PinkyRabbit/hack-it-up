@@ -66,13 +66,13 @@ async function autosaveArticle(req, res) {
  */
 async function saveArticle(req, res) {
   const { articleId } = req.params;
-  const updatedFields = await updateArticle(req.body);
-  let redirectUrl = `/admin/article/${articleId}`;
+  const updatedFields = await updateArticle(articleId, req.body);
+  let redirectUrl = `/article/${articleId}`;
   const { slug, categoryId } = updatedFields;
   if (slug && categoryId) {
     redirectUrl = `/${categoryId}/${slug}`;
   }
-  res.redirect(`/admin/article/${redirectUrl}`);
+  res.redirect(redirectUrl);
 }
 
 /**
