@@ -56,16 +56,18 @@ block content
       input#body(name="content" type="hidden" value=content)
     .form-group
       label(for="img-button") Изображение статьи
+      - var imageStyle = article.image ? "" : "display: none"
+      img.img-responsive#img-preview(src="/images/" + article.image alt="Главное изображение статьи" style=imageStyle)
       if article.image
         button.btn.btn-default.btn-lg.btn-block#img-button(type="button") Заменить изображение
-        img.img-responsive(src="/images/a/" + article.image alt="Главное изображение статьи")
-        input#body(name="image" type="hidden" value=article.image)
       else
         button.btn.btn-success.btn-lg.btn-block#img-button(type="button") Загрузить изображение
+      input#body(name="image" type="hidden" value=article.image)
     button.btn.btn-danger.btn-lg.btn-block(type="submit") Перейти к просмотру
   
-  form(method="POST" action="/article/" + article._id + '/image' id="send-image-form")
-    input(name="image-file" id="image-file" type="file" style="display: none")
+  form(method="POST" action="/admin/article/" + article._id + '/image' id="send-image-form" enctype="multipart/form-data")
+      input(name="image-file" id="image-file" type="file" style="display: none")
+    
   script(src="/js/edit-article.js")
   script(src="//cdn.quilljs.com/1.3.6/quill.min.js")
   link(rel='stylesheet' href="//cdn.quilljs.com/1.3.6/quill.snow.css")

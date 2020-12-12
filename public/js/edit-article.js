@@ -143,10 +143,12 @@ function onImageSelect() {
     const reader = new FileReader();
 
     reader.onload = () => {
+      $('#img-preview').attr('src', reader.result);
+      $('#img-preview').attr('style', '');
       $('#send-image-form').submit();
     };
 
-    reader.readAsDataURL(file); // convert to base64 string
+    reader.readAsDataURL(file);
   }
 }
 

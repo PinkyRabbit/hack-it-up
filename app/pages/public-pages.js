@@ -1,14 +1,19 @@
-const express = require('express');
 const marked = require('marked');
 const fs = require('fs').promises;
 const path = require('path');
 const createError = require('http-errors');
 
-const validators = require('../validators');
-
 const pagesOptions = require('../../pages.json');
 const fakeAritcles = require('../articles.json');
 const { ArticleCollection } = require('../database');
+
+// @FIXME: should be in constants
+const reservedSlugs = [
+  'login',
+  'unpublished',
+  'about-me',
+  'article',
+];
 
 /**
  * Get home page / news feed
@@ -24,7 +29,10 @@ function getHomePage(req, res) {
  * Get article by slug.
  */
 async function getArticleBySlug(req, res, next) {
-  const { articleSlug } = req.params;
+  const { categorySlug, articleSlug } = req.params;
+  if (reservedSlugs.includes(categorySlug)) {
+    return next();
+  }
   const article = await ArticleCollection.findOne({ slug: articleSlug });
   if (!article) {
     // should return next cuz article could be taken also by id
@@ -44,14 +52,6 @@ async function getArticleById(req, res, next) {
   }
   return res.render('article', { page: article });
 }
-
-// @FIXME: should be in constants
-const reservedSlugs = [
-  'login',
-  'unpublished',
-  'about-me',
-  'article',
-];
 
 /**
  * Get all articles in a category
@@ -126,42 +126,11 @@ async function getStatic(req, res, next) {
   return await staticPageFunction();
 }
 
-// @NOTE: should be replaced with correct method
-function mockSessionValidator(req, res, next) {
-  return next();
-}
-
-/**
- * Create and export public pages router.
- */
-const publicPagesRouter = express.Router();
-
-publicPagesRouter
-  .get('/', getHomePage)
-  .get(
-    '/:categorySlug',
-    validators.categorySlugValidator,
-    getCategory,
-  )
-  .get(
-    '/unpublished',
-    mockSessionValidator,
-    getUnpublished,
-  )
-  .get(
-    '/:categorySlug/:articleSlug',
-    validators.articleAndCategorySlugsValidator,
-    getArticleBySlug,
-  )
-  .get(
-    '/article/:articleId',
-    mockSessionValidator,
-    validators.articleIdValidator,
-    getArticleById,
-  )
-  .get(
-    '/:staticPageSlug',
-    getStatic,
-  );
-
-module.exports = publicPagesRouter;
+module.exports = {
+  getHomePage,
+  getCategory,
+  getArticleBySlug,
+  getArticleById,
+  getUnpublished,
+  getStatic,
+};

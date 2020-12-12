@@ -1,9 +1,9 @@
-const express = require('express');
 const createError = require('http-errors');
+const path = require('path');
+const fs = require('fs').promises;
 
-const validators = require('../validators');
 const { Article } = require('../factories');
-const { mongodbId, ArticleCollection } = require('../database');
+const { ArticleCollection } = require('../database');
 
 const pagesOptions = require('../../pages.json');
 const categories = require('../categories.json');
@@ -27,13 +27,13 @@ async function createArticle(req, res) {
  */
 async function getEditArticlePage(req, res, next) {
   const { articleId } = req.params;
-  const _id = mongodbId(articleId);
-  const article = await ArticleCollection.findOne({ _id });
+  const article = await ArticleCollection.findOne({ _id: articleId });
   if (!article) {
     return next(createError(404, 'Страница не существует'));
   }
   if (article.isPublished) {
-    await ArticleCollection.update({ _id }, { $set: { isPublished: false } });
+    await ArticleCollection
+      .findOneAndUpdate({ _id: articleId }, { $set: { isPublished: false } });
   }
   return res.render('edit-article', {
     article,
@@ -75,10 +75,39 @@ async function saveArticle(req, res) {
   res.redirect(`/admin/article/${redirectUrl}`);
 }
 
-function updateImage(req, res) {
+/**
+ * Delete old image and set new as article image.
+ */
+async function updateArticleImage(req, res) {
   const { articleId } = req.params;
+  const article = await ArticleCollection.findOne({ _id: articleId });
 
-  res.redirect(`/admin/article/${articleId}`);
+  if (article.image) {
+    const pathToOldImage = path.join(__dirname, '../../public/images/', article.image);
+    try {
+      await fs.unlink(pathToOldImage);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  }
+
+  if (req.file) {
+    const { filename } = req.file;
+    await ArticleCollection.update({ _id: articleId }, { $set: { image: `a/${filename}` } });
+  }
+  req.flash('success', 'Изображение успешно обновлено.');
+  return res.redirect(`/admin/article/${articleId}`);
+}
+
+/**
+ * To delete article
+ */
+async function deleteArticle(req, res) {
+  const { articleId } = req.params;
+  await ArticleCollection.remove({ _id: articleId });
+  req.flash('success', 'Статья успешно удалена.');
+  res.redirect('back');
 }
 
 function publish(req, res) {
@@ -87,67 +116,12 @@ function publish(req, res) {
   res.redirect(`/admin/article/${articleId}`);
 }
 
-/**
- * To delete article
- */
-async function deleteAnArticle(req, res) {
-  const { articleId } = req.params;
-  await ArticleCollection.remove({ _id: articleId });
-  req.flash('success', 'Статья успешно удалена.');
-  res.redirect('back');
-}
-
-// @NOTE: should be replaced with correct method
-function mockSessionValidator(req, res, next) {
-  return next();
-}
-
-/**
- * Create and export edit article router
- */
-const adminArticleRouter = express.Router();
-
-adminArticleRouter
-  .get(
-    '/add',
-    mockSessionValidator,
-    createArticle,
-  )
-  .get(
-    '/:articleId',
-    mockSessionValidator,
-    validators.articleIdValidator,
-    getEditArticlePage,
-  )
-  .put(
-    '/:articleId',
-    mockSessionValidator,
-    validators.articleIdValidator,
-    autosaveArticle,
-  )
-  .post(
-    '/:articleId',
-    mockSessionValidator,
-    validators.articleIdValidator,
-    saveArticle,
-  )
-  .post(
-    '/:articleId/image',
-    mockSessionValidator,
-    validators.articleIdValidator,
-    updateImage,
-  )
-  .get(
-    '/:articleId/publish',
-    mockSessionValidator,
-    validators.articleIdValidator,
-    publish,
-  )
-  .get(
-    '/:articleId/delete',
-    mockSessionValidator,
-    validators.articleIdValidator,
-    deleteAnArticle,
-  );
-
-module.exports = adminArticleRouter;
+module.exports = {
+  createArticle,
+  getEditArticlePage,
+  autosaveArticle,
+  saveArticle,
+  updateArticleImage,
+  deleteArticle,
+  publish,
+};
