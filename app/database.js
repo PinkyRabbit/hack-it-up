@@ -14,4 +14,6 @@ const options = {
 module.exports = {
   mongodbId: (_id) => monk.id(_id),
   ArticleCollection: monk(url, options).get('article'),
+  CategoryCollection: monk(url, options).get('category'),
+  TagCollection: monk(url, options).get('tag'),
 };

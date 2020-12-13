@@ -5,7 +5,6 @@ const fs = require('fs').promises;
 const { Article } = require('../factories');
 const { ArticleCollection } = require('../database');
 
-const pagesOptions = require('../../pages.json');
 const categories = require('../categories.json');
 
 /**
@@ -38,7 +37,11 @@ async function getEditArticlePage(req, res, next) {
   return res.render('edit-article', {
     article,
     categories,
-    page: pagesOptions.editArticle,
+    page: {
+      title: 'Редактирование...',
+      h1: 'Редактор статьи',
+      image: 'd/admin.jpg',
+    },
   });
 }
 

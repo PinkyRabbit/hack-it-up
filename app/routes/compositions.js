@@ -78,6 +78,14 @@ const routerCompositionTo = {
     csrfProtection,
     pages.loginRequest,
   ],
+  manageCategories: [
+    mockSessionValidator,
+    pages.manageCategories,
+  ],
+  manageTags: [
+    mockSessionValidator,
+    pages.manageTags,
+  ],
 };
 
 module.exports = { routerCompositionTo };

@@ -1,0 +1,10 @@
+//- categories-manage.pug
+extends layout/main.pug
+
+block content
+  if !categories || !categories.length
+    h2 Категории не найдены
+  else
+    each category, index in categories
+      a(href="/admin/category/" + tag._id title="Редактировать " + category.name)
+        | #{category.name}

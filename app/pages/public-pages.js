@@ -109,6 +109,23 @@ async function aboutMePage(res) {
 }
 
 /**
+ * To display static Offers page.
+ */
+async function offersPage(res) {
+  const aboutMeFile = path.join(__dirname, '../../static/offers.md');
+  const offersMarkup = await fs.readFile(aboutMeFile, 'utf-8');
+  const page = {
+    title: 'Introduce',
+    h1: 'Я рекомендую',
+    keywords: 'NodeJS программы софт',
+    description: 'Страничка где я выкладываю полезные инструменты для NodeJS разработчика, которые я рекомендую.',
+    image: '/d/offers.jpg',
+    content: marked(offersMarkup),
+  };
+  res.render('article', { page });
+}
+
+/**
  * Method to get static pages with markdown markup.
  */
 async function getStatic(req, res, next) {
@@ -118,6 +135,9 @@ async function getStatic(req, res, next) {
   switch (staticPageSlug) {
     case 'about-me':
       staticPageFunction = () => aboutMePage(res);
+      break;
+    case 'offers':
+      staticPageFunction = () => offersPage(res);
       break;
     default:
       return next();

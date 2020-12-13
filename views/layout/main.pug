@@ -46,14 +46,20 @@ html(lang='ru')
                   a(href="#")
                     span.glyphicon.glyphicon-folder-open(aria-hidden="true")
                     | Тестовая категория
-                li.divider(role="separator")
-                li
-                  a(href="/unpublished")
-                    span.glyphicon.glyphicon-new-window(aria-hidden="true")
-                    | Неопубликованное
             li
               a(href="/about-me" title="Обо мне") Обо мне
+            li
+              a(href="/offers" title="Различные рефералочки") Я рекомендую
           ul.nav.navbar-nav.pull-right
+            li
+              a(href="/admin/categories" title="Управление категориями")
+                span.glyphicon.glyphicon-book(aria-hidden="true")
+            li
+              a(href="/admin/tags" title="Управление тегами")
+                span.glyphicon.glyphicon-tags(aria-hidden="true")
+            li
+              a(href="/unpublished" title="Неопубликованное")
+                span.glyphicon.glyphicon-eye-close(aria-hidden="true")
             li
               a(href="/admin/article/add" title="Создать статью")
                 span.glyphicon.glyphicon-plus(aria-hidden="true")

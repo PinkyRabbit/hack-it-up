@@ -1,0 +1,13 @@
+//- tags-manage.pug
+extends layout/main.pug
+
+block content
+  if !tags || !tags.length
+    h2 Теги не найдены
+  else
+    pre= JSON.stringify(tags)
+    each tag, index in tags
+      a(href="/admin/tag/" + tag._id title="Редактировать " + tag.name)
+        | #{tag.name}
+        if index !== tags.length - 1
+          | ,

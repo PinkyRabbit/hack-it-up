@@ -1,5 +1,6 @@
 const publicPages = require('./public-pages');
 const articleEditor = require('./admin.article-editor');
+const manageCategoriesAndTags = require('./admin.categories-and-tags');
 const other = require('./other');
 
 // @FIXME: show categories without description!
@@ -8,5 +9,6 @@ const other = require('./other');
 module.exports = {
   ...publicPages,
   ...articleEditor,
+  ...manageCategoriesAndTags,
   ...other,
 };
