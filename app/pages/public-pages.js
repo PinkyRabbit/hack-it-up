@@ -3,6 +3,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const createError = require('http-errors');
 
+const { getFullArticleById } = require('../database.methods');
+
 const pagesOptions = require('../../pages.json');
 const fakeAritcles = require('../articles.json');
 const { ArticleCollection } = require('../database');
@@ -46,7 +48,7 @@ async function getArticleBySlug(req, res, next) {
  */
 async function getArticleById(req, res, next) {
   const { articleId } = req.params;
-  const article = await ArticleCollection.findOne({ _id: articleId });
+  const article = await getFullArticleById(articleId);
   if (!article) {
     return next(createError(404, 'Страница не существует'));
   }

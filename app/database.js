@@ -9,11 +9,12 @@ monk(url).catch((err) => {
 
 const options = {
   loggerLevel: 'error',
+  useNewUrlParser: true,
 };
 
 module.exports = {
   mongodbId: (_id) => monk.id(_id),
-  ArticleCollection: monk(url, options).get('article'),
-  CategoryCollection: monk(url, options).get('category'),
-  TagCollection: monk(url, options).get('tag'),
+  ArticleCollection: monk(url, options).get('articles'),
+  CategoryCollection: monk(url, options).get('categories'),
+  TagCollection: monk(url, options).get('tags'),
 };

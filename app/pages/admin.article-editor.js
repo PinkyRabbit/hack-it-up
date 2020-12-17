@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs').promises;
 
 const { Article } = require('../factories');
-const { ArticleCollection } = require('../database');
+const { ArticleCollection, TagCollection } = require('../database');
+const { getFullArticleById } = require('../database.methods');
 
 const categories = require('../categories.json');
 
@@ -26,7 +27,7 @@ async function createArticle(req, res) {
  */
 async function getEditArticlePage(req, res, next) {
   const { articleId } = req.params;
-  const article = await ArticleCollection.findOne({ _id: articleId });
+  const article = await getFullArticleById(articleId);
   if (!article) {
     return next(createError(404, 'Страница не существует'));
   }
@@ -51,6 +52,13 @@ async function getEditArticlePage(req, res, next) {
 async function updateArticle(articleId, plainArticleObject) {
   const article = new Article(plainArticleObject);
   article.updatedAt = (new Date()).toISOString();
+  if (Array.isArray(article.tags) === false) {
+    article.tags = [article.tags];
+  }
+  if (article.tags.length) {
+    const tags = await TagCollection.find({ name: { $in: article.tags } });
+    article.tags = tags.map((tag) => tag._id);
+  }
   await ArticleCollection.update({ _id: articleId }, { $set: article });
   return article;
 }

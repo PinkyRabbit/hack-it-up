@@ -131,6 +131,10 @@ a.category-name:focus{
 a.btn-default{
     color: #31708f!important;
 }
+#create-tag:hover,
+#create-tag:focus{
+  cursor: pointer;
+}
 
 /* spinner */
 #img-spinner{

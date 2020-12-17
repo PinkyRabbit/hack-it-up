@@ -10,6 +10,12 @@ function Article(props) {
   this.tags = props.tags || [];
 }
 
+function Tag(tagName) {
+  this.name = tagName;
+  this.slug = stringToSlug(this.name);
+}
+
 module.exports = {
   Article,
+  Tag,
 };

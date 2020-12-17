@@ -1,4 +1,5 @@
 const { CategoryCollection, TagCollection } = require('../database');
+const { Tag } = require('../factories');
 
 /**
  * Method to get manage categories page.
@@ -30,7 +31,34 @@ async function manageTags(req, res) {
   });
 }
 
+/**
+ * Method to search tag by name.
+ */
+async function searchTagRequest(req, res) {
+  const { search } = req.query;
+  const chunkRegex = /[a-zа-я0-9]+/ig;
+  const searchChunks = search.match(chunkRegex).map((word) => new RegExp(word, 'i'));
+  const tags = await TagCollection.find({ name: { $in: searchChunks } });
+  return res.json({ data: tags || [] });
+}
+
+async function createANewTag(req, res) {
+  const tagName = req.body && req.body.tagName.trim();
+  if (!tagName) {
+    return res.status(400).json({ message: 'Пустая строка вместо тега.' });
+  }
+  const newTag = new Tag(tagName);
+  const existedSlug = await TagCollection.findOne({ slug: newTag.slug });
+  if (existedSlug) {
+    return res.status(400).json({ message: 'Такой тег уже создан.' });
+  }
+  await TagCollection.insert(newTag);
+  return res.json({ success: true });
+}
+
 module.exports = {
   manageCategories,
   manageTags,
+  searchTagRequest,
+  createANewTag,
 };

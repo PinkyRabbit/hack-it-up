@@ -19,6 +19,8 @@ module.exports.initRoutes = (app) => {
     .get('/admin/article/:articleId/delete', routerCompositionTo.deleteArticle)
     .get('/admin/categories', routerCompositionTo.manageCategories)
     .get('/admin/tags', routerCompositionTo.manageTags)
+    .post('/admin/tags', routerCompositionTo.createANewTag)
+    .get('/admin/tags/search', routerCompositionTo.searchTag)
     .get('/article/:articleId', routerCompositionTo.getArticleAsAdmin)
     .get('/unpublished', routerCompositionTo.getUnpublishedArticles)
     .get('/login', routerCompositionTo.getLoginPage)

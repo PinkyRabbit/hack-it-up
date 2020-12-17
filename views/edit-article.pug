@@ -42,7 +42,11 @@ block content
           div class="form-group">
     .form-group
       label(for="tag") Теги
-      input.form-control(autocomplete="off" type="text" id="tag")
+      .input-group
+        input.form-control(autocomplete="off" type="text" id="tag")
+        .input-group-addon#create-tag +
+      .list-group#tags-list
+        a.list-group-item(href="#") Morbi leo risus
     section.tags#tags-area
       - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
       each tag, index in article.tags

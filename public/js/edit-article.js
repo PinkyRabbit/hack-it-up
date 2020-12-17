@@ -6,6 +6,10 @@ const inputOptions = {
   description: [0, 300],
 };
 
+function logOnError(error) {
+  console.error(error);
+}
+
 function inputRemoveGreen(el) {
   if (el.hasClass('has-success')) {
     el.removeClass('has-success');
@@ -127,7 +131,65 @@ function bidTagRemove(el) {
   });
 }
 
+function selectTag(tagName) {
+  $('#tags-list').innerHTML = '';
+  $('#tags-area').append(`
+    <span class="tag-wrapper" onclick="function(){ $(this).remove(); }">
+      <input class="form-control" autocomplete="off" name="tags" type="hidden" value="${tagName}" />
+      <span class="label label-info">
+        <span class="glyphicon glyphicon-tag" area-hidden="true"></span> ${tagName} 
+      </span>
+    </span>
+  `);
+}
+
+function createATag(tagName) {
+  $.ajax({
+    type: 'POST',
+    url: '/admin/tags',
+    data: { tagName },
+    dataType: 'json',
+    success: (data) => {
+      selectTag(tagName);
+    },
+    error: logOnError,
+  });
+  $('#tag').val('');
+}
+
+function searchTag(val) {
+  if (val.length < 2) {
+    return false;
+  }
+  const tagsList = $('#tags-list');
+  tagsList.innerHTML = '';
+
+  $.ajax({
+    type: 'GET',
+    url: `/admin/tags/search?search=${val}`,
+    success: (response) => {
+      const { data } = response;
+      data.forEach(({ name: tag }) => {
+        tagsList.append(`<a class="list-group-item" href="#" onclick="selectTag(${tag})">${tag}</a>`);
+      });
+    },
+    error: logOnError,
+  });
+}
+
 function initTags() {
+  const tagInput = $('#tag');
+  $('#create-tag').on('click', () => createATag(tagInput.val()));
+  tagInput.on('keyup', () => {
+    const timer = setTimeout(() => {
+      if (Date.now() - timestamp >= delay) {
+        searchTag(tagInput.val());
+        clearTimeout(timer);
+      }
+    }, delay);
+    timestamp = Date.now();
+  });
+
   $('.tag-wrapper').each(function () {
     const el = $(this);
     bidTagRemove(el);
@@ -180,9 +242,7 @@ function save(editor) {
     success: () => {
       console.log(`Autosave ${(new Date()).toLocaleString()}`);
     },
-    error: (err) => {
-      console.error(err);
-    },
+    error: logOnError,
   });
 }
 

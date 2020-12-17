@@ -86,6 +86,15 @@ const routerCompositionTo = {
     mockSessionValidator,
     pages.manageTags,
   ],
+  searchTag: [
+    mockSessionValidator,
+    validators.searchValidator,
+    pages.searchTagRequest,
+  ],
+  createANewTag: [
+    mockSessionValidator,
+    pages.createANewTag,
+  ],
 };
 
 module.exports = { routerCompositionTo };
