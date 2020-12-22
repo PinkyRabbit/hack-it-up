@@ -26,6 +26,7 @@ module.exports.initRoutes = (app) => {
     .get('/unpublished', routerCompositionTo.getUnpublishedArticles)
     .get('/login', routerCompositionTo.getLoginPage)
     .post('/login', routerCompositionTo.sendLoginRequest)
+    .get('/tag/:tagSlug', routerCompositionTo.getArticlesByTag)
     .get('/:categorySlug/:articleSlug', routerCompositionTo.getArticleAsUser)
     .get('/:staticPageSlug', routerCompositionTo.getStaticPage)
     .get('/:categorySlug', routerCompositionTo.getCategory);
@@ -36,5 +37,5 @@ module.exports.initRoutes = (app) => {
 };
 
 module.exports.reservedCategorySlugs = [
-  'admin', 'article', 'unpublished', 'login',
+  'admin', 'article', 'unpublished', 'login', 'tag',
 ];

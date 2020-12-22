@@ -29,4 +29,8 @@ module.exports = {
     param('categorySlug').trim().matches(slugRegex),
     pageNotFoundIfInvalid,
   ],
+  tagSlugValidator: [
+    param('tagSlug').trim().matches(slugRegex),
+    pageNotFoundIfInvalid,
+  ],
 };

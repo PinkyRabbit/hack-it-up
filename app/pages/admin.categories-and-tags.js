@@ -1,5 +1,8 @@
+const createError = require('http-errors');
+
 const { CategoryCollection, TagCollection } = require('../database');
 const { Tag } = require('../factories');
+const { getArticlesForFeed } = require('../database.methods');
 
 /**
  * Method to get manage categories page.
@@ -76,10 +79,35 @@ async function updateTag(req, res) {
   return res.redirect('back');
 }
 
+async function getArticlesByTag(req, res, next) {
+  const { tagSlug } = req.params;
+
+  const tag = await TagCollection.findOne({ slug: tagSlug });
+  if (!tag) {
+    return next(createError(404, 'Страница не существует'));
+  }
+
+  const articles = await getArticlesForFeed(1, { tagId: tag._id });
+
+  const page = {
+    title: `Тег ${tag.name}`,
+    keywords: tag.name,
+    description: `Эта страница посвящена ${tag.name}. Блог разработчика. Программирование - интересное приключение.`,
+    h1: `Тег ${tag.name}`,
+    image: 'd/main.jpg',
+  };
+
+  return res.render('news-feed', {
+    page,
+    articles,
+  });
+}
+
 module.exports = {
   manageCategories,
   manageTags,
   searchTagRequest,
   createANewTag,
   updateTag,
+  getArticlesByTag,
 };

@@ -101,6 +101,10 @@ const routerCompositionTo = {
     validators.tagValidator,
     pages.updateTag,
   ],
+  getArticlesByTag: [
+    validators.tagSlugValidator,
+    pages.getArticlesByTag,
+  ],
 };
 
 module.exports = { routerCompositionTo };
