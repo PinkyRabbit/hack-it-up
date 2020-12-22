@@ -18,4 +18,5 @@ function redirectIfInvalid(req, res, next) {
 
 module.exports = {
   articleIdValidator: [param('articleId').trim().isMongoId(), redirectIfInvalid],
+  tagIdValidator: [param('tagId').trim().isMongoId(), redirectIfInvalid],
 };

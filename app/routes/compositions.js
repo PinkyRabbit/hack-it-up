@@ -95,6 +95,12 @@ const routerCompositionTo = {
     mockSessionValidator,
     pages.createANewTag,
   ],
+  updateTag: [
+    mockSessionValidator,
+    validators.tagIdValidator,
+    validators.tagValidator,
+    pages.updateTag,
+  ],
 };
 
 module.exports = { routerCompositionTo };

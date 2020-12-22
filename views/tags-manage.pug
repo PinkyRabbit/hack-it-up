@@ -2,12 +2,31 @@
 extends layout/main.pug
 
 block content
+  script.
+    function editTag(tag) {
+      $('#admin-tag-form').removeClass('hidden');
+      $('#admin-tag-form').attr('action', '/admin/tag/' + tag._id);
+      $('#admin-tag-name').val(tag.name);
+      $('#admin-tag-slug').val(tag.slug);
+    }
+    function hideForm() {
+      $('#admin-tag-form').addClass('hidden');
+    }
+  form#admin-tag-form.hidden.form-inline(action="/admin/tag" method="POST" onsubmit="hideForm()")
+    .form-group
+      .input-group
+        span.input-group-addon Title
+        input.form-control#admin-tag-name(autocomplete="off" type="text" name="name")
+    .form-group
+      .input-group
+        span.input-group-addon Slug
+        input.form-control#admin-tag-slug(autocomplete="off" type="text" name="slug")
+    button.btn.btn-info(type="submit") >
+    hr
   if !tags || !tags.length
-    h2 Теги не найдены
+    h2 Пока не создано ни одного тега
   else
-    pre= JSON.stringify(tags)
     each tag, index in tags
-      a(href="/admin/tag/" + tag._id title="Редактировать " + tag.name)
+      -var stringifyTag = JSON.stringify(tag);
+      button.btn.btn-link(type="button" tag._id title="Редактировать " + tag.name onclick="editTag(" + stringifyTag+ ")")
         | #{tag.name}
-        if index !== tags.length - 1
-          | ,

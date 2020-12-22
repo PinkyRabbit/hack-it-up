@@ -42,6 +42,9 @@ async function searchTagRequest(req, res) {
   return res.json({ data: tags || [] });
 }
 
+/**
+ * Method for creating a new tag.
+ */
 async function createANewTag(req, res) {
   const tagName = req.body && req.body.tagName.trim();
   if (!tagName) {
@@ -56,9 +59,27 @@ async function createANewTag(req, res) {
   return res.json({ success: true });
 }
 
+async function updateTag(req, res) {
+  const existedSlug = await TagCollection.findOne({
+    slug: req.body.slug,
+    _id: {
+      $ne: req.params.tagId,
+    },
+  });
+  if (existedSlug) {
+    res.status(400);
+    req.flash('danger', 'Такой тег уже создан.');
+  } else {
+    await TagCollection.update({ _id: req.params.tagId }, { $set: req.body });
+    req.flash('success', 'Тег успешно обновлён.');
+  }
+  return res.redirect('back');
+}
+
 module.exports = {
   manageCategories,
   manageTags,
   searchTagRequest,
   createANewTag,
+  updateTag,
 };
