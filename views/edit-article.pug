@@ -26,12 +26,12 @@ block content
         span.input-group-addon description
         input.form-control(autocomplete="off" type="text" name="description" value=description)
     if categories && categories.length
-      .form-group#category(data-base-value=article.category ? article.category.slug : "")
+      .form-group#category(data-base-value=article.category ? article.category._id : "")
         label(for="category") Категория (сменить на input)
-        select.form-control
+        select.form-control(name="category")
           option(value='') - Please choose -
           each category in categories
-            option(value=category.slug)= category.name
+            option(value=category._id)= category.name
     else
       .alert(class="alert-warning" role='alert' style='margin-bottom: 10px')
           span.glyphicon.glyphicon-info-sign(aria-hidden="true")
@@ -46,7 +46,6 @@ block content
         input.form-control(autocomplete="off" type="text" id="tag")
         .input-group-addon#create-tag +
       .list-group#tags-list
-        a.list-group-item(href="#") Morbi leo risus
     section.tags#tags-area
       - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
       each tag, index in article.tags

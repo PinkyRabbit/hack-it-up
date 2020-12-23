@@ -8,6 +8,7 @@ function Article(props) {
   this.description = props.description || '';
   this.image = props.image || '';
   this.tags = props.tags || [];
+  this.category = props.category || null;
 }
 
 function Tag(tagName) {

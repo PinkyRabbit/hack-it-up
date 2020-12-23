@@ -97,7 +97,7 @@ function selectCategory() {
   const el = $('#category');
   const value = el.data('base-value');
   const select = el.find('select');
-  select.val(value);
+  select.val(value).change();
   setCategoryColor(select, value);
   select.on('change', function () {
     const newValue = $(this).val();

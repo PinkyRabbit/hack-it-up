@@ -27,15 +27,8 @@ const projectForFullArticle = {
       image: 1,
       body: 1,
       tags: 1,
-      category: {
-        $cond: {
-          if: '$categories',
-          then: '$categories',
-          else: {
-            name: '$category',
-          },
-        },
-      },
+      category: 1,
+      categories: 1,
       isPublished: 1,
       createdAt: 1,
       updatedAt: 1,
@@ -71,7 +64,7 @@ const defaultLookupsForAggregation = [
   { $lookup: join.categories },
   {
     $unwind: {
-      path: '$categories',
+      path: '$category',
       preserveNullAndEmptyArrays: true,
     },
   },

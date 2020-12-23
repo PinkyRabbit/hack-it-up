@@ -3,10 +3,8 @@ const path = require('path');
 const fs = require('fs').promises;
 
 const { Article } = require('../factories');
-const { ArticleCollection, TagCollection } = require('../database');
+const { ArticleCollection, TagCollection, CategoryCollection } = require('../database');
 const { getFullArticleById } = require('../database.methods');
-
-const categories = require('../categories.json');
 
 /**
  * Creates a new empty article and redirect to edit page
@@ -23,7 +21,7 @@ async function createArticle(req, res) {
 }
 
 /**
- * To display edit article page. If article was published status will changes to unpublised
+ * To display edit article page. If article was published status will changes to unpublished
  */
 async function getEditArticlePage(req, res, next) {
   const { articleId } = req.params;
@@ -37,7 +35,6 @@ async function getEditArticlePage(req, res, next) {
   }
   return res.render('edit-article', {
     article,
-    categories,
     page: {
       title: 'Редактирование...',
       h1: 'Редактор статьи',
@@ -58,6 +55,10 @@ async function updateArticle(articleId, plainArticleObject) {
   if (article.tags.length) {
     const tags = await TagCollection.find({ name: { $in: article.tags } });
     article.tags = tags.map((tag) => tag._id);
+  }
+  if (article.category) {
+    const category = await CategoryCollection.findOne({ _id: article.category });
+    article.category = category ? article.category : null;
   }
   await ArticleCollection.update({ _id: articleId }, { $set: article });
   return article;
