@@ -132,8 +132,19 @@ a.btn-default{
     color: #31708f!important;
 }
 #create-tag:hover,
-#create-tag:focus{
+#create-tag:focus,
+.delete-btn:hover,
+.delete-btn:focus {
   cursor: pointer;
+}
+.glyphicon-tag {
+  margin-right: 5px;
+}
+.glyphicon-folder-open {
+  margin-right: 10px;
+}
+.tag-cloud a {
+  color: #853a5e!important;
 }
 
 /* spinner */

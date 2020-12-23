@@ -37,15 +37,17 @@ html(lang='ru')
             img(src="/images/c/logo-min.jpg" alt="logo min")
         .navbar-collapse.collapse#navbar
           ul.nav.navbar-nav
-            li.dropdown
-              a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false")
-                | По категориям 
-                span.caret
-              ul.dropdown-menu.cats-menu
-                li
-                  a(href="#")
-                    span.glyphicon.glyphicon-folder-open(aria-hidden="true")
-                    | Тестовая категория
+            if categories && categories.length
+              li.dropdown
+                a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false")
+                  | По категориям 
+                  span.caret
+                ul.dropdown-menu.cats-menu
+                  each category in categories
+                    li
+                      a(href="/" + category.slug title=category.name)
+                        span.glyphicon.glyphicon-folder-open(aria-hidden="true")
+                        | #{category.name}
             li
               a(href="/about-me" title="Обо мне") Обо мне
             li
@@ -77,6 +79,21 @@ html(lang='ru')
               each message in messages
                 .alert(class="alert-" + message.type role='alert' style='margin-bottom: 10px')!= message.msg
             block content
+          aside.col-xs-12.col-sm-3
+            if cloudTags && cloudTags.length
+              - var tagColors = ["success", "info", "active", "warning", "danger"];
+              hr
+              table.table.tag-cloud
+                thead
+                  tr
+                    th Облако тегов
+                tbody
+                each tag, index in cloudTags
+                  tr
+                    td(class=tagColors[index])
+                      a(href="/tag/" + tag.slug)
+                        span.glyphicon.glyphicon-tag(aria-hidden="true")
+                        | #{tag.name}
     footer
       .container
         .row

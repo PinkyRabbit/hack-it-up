@@ -3,11 +3,11 @@ const fs = require('fs').promises;
 const path = require('path');
 const createError = require('http-errors');
 
-const { getFullArticleById } = require('../database.methods');
+const { getFullArticleById, getArticlesForFeed } = require('../database.methods');
 
 const pagesOptions = require('../../pages.json');
 const fakeAritcles = require('../articles.json');
-const { ArticleCollection } = require('../database');
+const { ArticleCollection, CategoryCollection } = require('../database');
 
 // @FIXME: should be in constants
 const reservedSlugs = [
@@ -58,24 +58,21 @@ async function getArticleById(req, res, next) {
 /**
  * Get all articles in a category
  */
-function getCategory(req, res, next) {
+async function getCategory(req, res, next) {
   const { categorySlug } = req.params;
   if (reservedSlugs.includes(categorySlug)) {
     return next();
   }
-  const category = {
-    name: 'Some category',
-    slug: 'some-category',
-    description: 'some category description',
-    image: '1.jpg',
-  };
+  const category = await CategoryCollection.findOne({ slug: categorySlug });
+  const articles = await getArticlesForFeed(1);
+
   const page = {
     h1: category.name,
     title: category.name,
-    descritpion: category.description,
-    image: category.image ? `/b/${category.image}` : '/c/no-image.jpg',
+    description: category.description,
+    image: category.image ? `/b/${category.image}` : '/d/main.jpg',
   };
-  return res.render('news-feed', { page, articles: fakeAritcles });
+  return res.render('news-feed', { page, articles });
 }
 
 /**
@@ -87,7 +84,7 @@ async function getUnpublished(req, res) {
     ...pagesOptions.main,
     h1: 'Неопубликованное',
     title: 'Неопубликованное',
-    descritpion: 'Неопубликованные статьи сайта',
+    description: 'Неопубликованные статьи сайта',
     image: '/d/unpublished.jpg',
   };
   return res.render('news-feed', { page, articles, isUnpublished: true });

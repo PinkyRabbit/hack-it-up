@@ -5,9 +5,10 @@ const path = require('path');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
-const initSession = require('./middlewares/session');
-const initFlash = require('./middlewares/flash');
-const useCompression = require('./middlewares/compression');
+const initSession = require('./middleware/session');
+const initFlash = require('./middleware/flash');
+const initGlobals = require('./middleware/globals');
+const useCompression = require('./middleware/compression');
 const { initRoutes } = require('./routes');
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(bodyParser.json());
 
 initSession(app);
 initFlash(app);
+initGlobals(app);
 initRoutes(app);
 
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;

@@ -2,7 +2,7 @@ const csrf = require('csurf');
 
 const pages = require('../pages');
 const validators = require('../validators');
-const { uploadArticleImage } = require('../middlewares/multer');
+const { uploadArticleImage } = require('../middleware/multer');
 
 const csrfProtection = csrf({ cookie: true });
 

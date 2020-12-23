@@ -89,7 +89,7 @@ function getFullArticleById(_id) {
   });
 }
 
-function getArticlesForFeed(page = 1, filter = null) {
+function getArticlesForFeed(page = 1, filter = {}) {
   const articlesLimit = 10;
   const offset = articlesLimit * (page - 1);
   const aggregation = [...defaultLookupsForAggregation];

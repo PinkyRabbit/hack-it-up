@@ -19,15 +19,18 @@ block content
       $('#edit-category-title').val('');
       $('#edit-category-description').val('');
     }
+    function validateInput(input) {
+      $('#' + input.name).text(input.name + ' (' + input.value.length + ')')
+    }
   form#edit-category-form(method="POST" action="/admin/categories")
     .form-group
       .input-group
-        span.input-group-addon title
-        input#edit-category-title.form-control(autocomplete="off" type="text" name="name")
-    .form-group#description
+        span.input-group-addon#name name
+        input#edit-category-title.form-control(autocomplete="off" type="text" name="name" onkeyup="validateInput(this)")
+    .form-group
       .input-group
-        span.input-group-addon description
-        input#edit-category-description.form-control(autocomplete="off" type="text" name="description")
+        span.input-group-addon#description description
+        input#edit-category-description.form-control(autocomplete="off" type="text" name="description" onkeyup="validateInput(this)")
     button#edit-category-btn.btn-danger.btn-lg.btn-block(type="submit") Создать категорию
   button#create-category-btn.btn-default.btn-lg.btn-block.hidden(type="button" onclick="editCancel()") Отменить редактирование
   if !categories || !categories.length
@@ -47,5 +50,5 @@ block content
               button.btn.btn-link(type="button" title="Редактировать " + category.name onclick="editCategory(" + stringifyCategory+ ")")
                 h4 #{category.name}
             td
-              a.btn.btn-default.btn-lg.pull-right(href="/admin/category/" + category._id+ "/delete" title="Удалить категорию" onclick="return confirm('Точно удаляем?')")
+              a.btn.btn-default.btn-lg.pull-right.delete-btn(href="/admin/category/" + category._id+ "/delete" title="Удалить категорию" onclick="return confirm('Точно удаляем?')")
                 span.glyphicon.glyphicon-trash(aria-hidden="true")
