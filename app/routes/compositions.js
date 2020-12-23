@@ -82,6 +82,22 @@ const routerCompositionTo = {
     mockSessionValidator,
     pages.manageCategories,
   ],
+  createCategory: [
+    mockSessionValidator,
+    validators.categoryValidator,
+    pages.createCategory,
+  ],
+  updateCategory: [
+    mockSessionValidator,
+    validators.categoryIdValidator,
+    validators.categoryValidator,
+    pages.updateCategory,
+  ],
+  deleteCategory: [
+    mockSessionValidator,
+    validators.categoryIdValidator,
+    pages.deleteCategory,
+  ],
   manageTags: [
     mockSessionValidator,
     pages.manageTags,

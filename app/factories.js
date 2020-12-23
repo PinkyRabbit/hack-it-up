@@ -15,7 +15,14 @@ function Tag(tagName) {
   this.slug = stringToSlug(this.name);
 }
 
+function Category(props) {
+  this.name = props.name || '';
+  this.slug = stringToSlug(this.name);
+  this.description = props.description || '';
+}
+
 module.exports = {
   Article,
   Tag,
+  Category,
 };

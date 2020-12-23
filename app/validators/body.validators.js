@@ -28,4 +28,9 @@ module.exports = {
       .isIn(reservedCategorySlugs),
     redirectIfInvalid,
   ],
+  categoryValidator: [
+    body('name').trim().isLength({ min: 1, max: 40 }),
+    body('description').trim().isLength({ min: 40, max: 140 }),
+    redirectIfInvalid,
+  ],
 };
