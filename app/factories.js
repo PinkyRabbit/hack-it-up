@@ -1,4 +1,5 @@
 const { stringToSlug } = require('./helpers');
+const { mongodbId } = require('./database');
 
 function Article(props) {
   this.h1 = props.h1 || '';
@@ -6,9 +7,10 @@ function Article(props) {
   this.slug = stringToSlug(this.h1);
   this.keywords = props.keywords || '';
   this.description = props.description || '';
+  this.content = props.content || '';
   this.image = props.image || '';
   this.tags = props.tags || [];
-  this.category = props.category || null;
+  this.category = mongodbId(props.category) || null;
 }
 
 function Tag(tagName) {

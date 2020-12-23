@@ -9,7 +9,7 @@ const initSession = require('./middleware/session');
 const initFlash = require('./middleware/flash');
 const initGlobals = require('./middleware/globals');
 const useCompression = require('./middleware/compression');
-const { initRoutes } = require('./routes');
+const initRoutes = require('./routes');
 
 const app = express();
 

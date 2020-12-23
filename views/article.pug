@@ -2,6 +2,7 @@
 extends layout/main.pug
 
 block content
+  - var editSlug = "/admin/article/" + page._id
   if !page.isPublished
     .alert(class="alert-info" role='alert' style='margin-bottom: 10px')
       span.glyphicon.glyphicon-info-sign(aria-hidden="true")
@@ -29,7 +30,6 @@ block content
       if !page.isPublished
         a.btn.btn-default.btn-lg(href="/admin/article/" + page._id + "/delete" title="Удалить статью" onclick="return confirm('Точно удаляем?')")
           span.glyphicon.glyphicon-trash(aria-hidden="true")
-      - var editSlug = "/admin/article/" + page._id
       a.btn.btn-info.btn-lg(href=editSlug role="button")
         span.glyphicon.glyphicon-pencil(aria-hidden="true")
   if !page.content

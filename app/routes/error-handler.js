@@ -1,5 +1,3 @@
-const pages = require('../../pages.json');
-
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 function publicOutput(err, req, res) {
@@ -7,12 +5,19 @@ function publicOutput(err, req, res) {
     req.flash('warning', 'Вы пробуете попасть в административную часть сайта. Авторизируйтесь.');
     res.status(err.status).redirect('/');
   }
-  res.status(404).render('error-public', { page: pages.error });
+  const page = {
+    title: '404',
+    description: 'Такой страницы не существует! Ошибка!',
+    h1: 'Ой! Ошибка!',
+    image: 'd/404.jpg',
+  };
+  res.status(404).render('error-public', { page });
 }
 
 function developmentOutput(err, req, res) {
   const page = {
-    ...pages.error,
+    description: 'Такой страницы не существует! Ошибка!',
+    image: 'd/404.jpg',
     h1: `Ошибка ${err.status || 'без статуса (500)'}`,
     title: err.status,
   };

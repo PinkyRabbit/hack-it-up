@@ -1,4 +1,4 @@
-const publicPages = require('./public-pages');
+const publicPages = require('./public');
 const articleEditor = require('./admin.article-editor');
 const manageCategoriesAndTags = require('./admin.categories-and-tags');
 const other = require('./other');

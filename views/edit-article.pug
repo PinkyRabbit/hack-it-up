@@ -7,7 +7,7 @@ block content
   - var description = article.description || "";
   - var keywords = article.keywords || "";
   - var content =article.content || "";
-  form(method="POST" action="/admin/article/" + article._id id="edit-article-form")
+  form#edit-article-form(method="POST" action="/admin/article/" + article._id)
     input(type="hidden" id="_id" value=article._id)
     .form-group#h1
       .input-group
@@ -56,7 +56,7 @@ block content
             | #{tag.name}
     #editor-wrapper
       #editor!= content
-      input#body(name="content" type="hidden" value=content)
+      input#content(name="content" type="hidden" value=content)
     .form-group
       input#body(name="image" type="hidden" value=article.image)
       #img-spinner(style="display: none")

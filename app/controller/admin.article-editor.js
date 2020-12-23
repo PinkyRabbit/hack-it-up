@@ -56,11 +56,13 @@ async function updateArticle(articleId, plainArticleObject) {
     const tags = await TagCollection.find({ name: { $in: article.tags } });
     article.tags = tags.map((tag) => tag._id);
   }
+
+  await ArticleCollection.update({ _id: articleId }, { $set: article });
+
   if (article.category) {
     const category = await CategoryCollection.findOne({ _id: article.category });
-    article.category = category ? article.category : null;
+    article.category = category ? category.slug : null;
   }
-  await ArticleCollection.update({ _id: articleId }, { $set: article });
   return article;
 }
 
@@ -78,11 +80,11 @@ async function autosaveArticle(req, res) {
  */
 async function saveArticle(req, res) {
   const { articleId } = req.params;
-  const updatedFields = await updateArticle(articleId, req.body);
+  const updatedArticle = await updateArticle(articleId, req.body);
   let redirectUrl = `/article/${articleId}`;
-  const { slug, categoryId } = updatedFields;
-  if (slug && categoryId) {
-    redirectUrl = `/${categoryId}/${slug}`;
+  const { slug, category } = updatedArticle;
+  if (slug && category) {
+    redirectUrl = `/${category}/${slug}`;
   }
   res.redirect(redirectUrl);
 }
@@ -122,10 +124,43 @@ async function deleteArticle(req, res) {
   res.redirect('back');
 }
 
-function publish(req, res) {
+/**
+ * Method to push current article into body. Validation purposes only.
+ */
+async function extractArticle(req, res, next) {
   const { articleId } = req.params;
+  const article = await ArticleCollection.findOne({ _id: articleId });
+  if (!article) {
+    return next(createError(404, 'Страница не существует'));
+  }
+  req.body = article;
+  return next();
+}
 
-  res.redirect(`/admin/article/${articleId}`);
+/**
+ * For publishing the article.
+ */
+async function publish(req, res) {
+  const { articleId } = req.params;
+  const dateOfUpdate = (new Date()).toISOString();
+  const updatedArticle = await ArticleCollection.findOneAndUpdate(
+    { _id: articleId },
+    {
+      $set: {
+        isPublished: true,
+        updatedAt: dateOfUpdate,
+      },
+    },
+  );
+  const category = await CategoryCollection.findOneAndUpdate(
+    { _id: updatedArticle.category },
+    {
+      $set: {
+        updatedAt: dateOfUpdate,
+      },
+    },
+  );
+  res.redirect(`/${category.slug}/${updatedArticle.slug}`);
 }
 
 module.exports = {
@@ -135,5 +170,6 @@ module.exports = {
   saveArticle,
   updateArticleImage,
   deleteArticle,
+  extractArticle,
   publish,
 };

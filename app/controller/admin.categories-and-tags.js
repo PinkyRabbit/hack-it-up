@@ -1,8 +1,5 @@
-const createError = require('http-errors');
-
 const { CategoryCollection, TagCollection, ArticleCollection } = require('../database');
 const { Tag, Category } = require('../factories');
-const { getArticlesForFeed } = require('../database.methods');
 
 /**
  * Method to get manage categories page.
@@ -137,28 +134,17 @@ async function updateTag(req, res) {
   return res.redirect('back');
 }
 
-async function getArticlesByTag(req, res, next) {
-  const { tagSlug } = req.params;
-
-  const tag = await TagCollection.findOne({ slug: tagSlug });
-  if (!tag) {
-    return next(createError(404, 'Страница не существует'));
+async function deleteTag(req, res) {
+  const { tagId } = req.params;
+  try {
+    await TagCollection.remove({ _id: tagId });
+    await ArticleCollection.update({ tag: tagId }, { $unset: { tag: tagId } });
+    req.flash('success', 'Тег успешно удалён.');
+  } catch (error) {
+    req.flash('danger', 'Ошибка при удалении тега!');
+    res.status(500);
   }
-
-  const articles = await getArticlesForFeed(1, { tagId: tag._id });
-
-  const page = {
-    title: `Тег ${tag.name}`,
-    keywords: tag.name,
-    description: `Эта страница посвящена ${tag.name}. Блог разработчика. Программирование - интересное приключение.`,
-    h1: `Тег ${tag.name}`,
-    image: 'd/main.jpg',
-  };
-
-  return res.render('news-feed', {
-    page,
-    articles,
-  });
+  return res.redirect('back');
 }
 
 module.exports = {
@@ -170,5 +156,5 @@ module.exports = {
   searchTagRequest,
   createANewTag,
   updateTag,
-  getArticlesByTag,
+  deleteTag,
 };

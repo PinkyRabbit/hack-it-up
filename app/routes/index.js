@@ -5,7 +5,7 @@ const { routerCompositionTo } = require('./compositions');
 
 const errorHandler = require('./error-handler');
 
-module.exports.initRoutes = (app) => {
+function initRoutes(app) {
   const router = express.Router();
 
   router
@@ -24,6 +24,7 @@ module.exports.initRoutes = (app) => {
     .get('/admin/tags', routerCompositionTo.manageTags)
     .post('/admin/tags', routerCompositionTo.createANewTag)
     .post('/admin/tag/:tagId', routerCompositionTo.updateTag)
+    .get('/admin/tag/:tagId/delete', routerCompositionTo.deleteTag)
     .get('/admin/tags/search', routerCompositionTo.searchTag)
     .get('/article/:articleId', routerCompositionTo.getArticleAsAdmin)
     .get('/unpublished', routerCompositionTo.getUnpublishedArticles)
@@ -37,8 +38,6 @@ module.exports.initRoutes = (app) => {
   app.use('/', router);
   app.use((req, res, next) => next(createError(404, 'Страница не существует')));
   app.use(errorHandler);
-};
+}
 
-module.exports.reservedCategorySlugs = [
-  'admin', 'article', 'unpublished', 'login', 'tag',
-];
+module.exports = initRoutes;

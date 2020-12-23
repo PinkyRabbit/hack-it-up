@@ -1,7 +1,7 @@
 const { param, validationResult } = require('express-validator');
 const createError = require('http-errors');
 
-const { reservedCategorySlugs } = require('../routes');
+const { reservedCategorySlugs } = require('../routes/constants');
 
 const slugRegex = /^[a-z0-9]+(-[a-z0-9]+)*?$/;
 

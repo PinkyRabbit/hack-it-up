@@ -7,7 +7,7 @@ block content
     p Но обязательно появятся =)
   else
     each article in articles
-      - var url = isUnpublished ? "/article/" + article._id : "/" + article.category.slug +"/" + article.slug;
+      - var url = article.isPublished && article.category ? "/" + article.category.slug +"/" + article.slug : "/article/" + article._id; 
       - var imgSrc = article.image ? "/images/" + article.image : "/images/c/no-image.jpg";
       article.news-feed
         h2
@@ -34,8 +34,9 @@ block content
               a(href="/" + article.category.slug title=article.category.name)= article.category.name
             else
               | Категория не указана
-          li
-            span.glyphicon.glyphicon-trash(aria-hidden="true")
-            |  
-            a(href="/admin/article/" + article._id + "/delete" title="Удалить статью" onclick="return confirm('Точно удаляем?')") Удалить статью
+          if !article.isPublished
+            li
+              span.glyphicon.glyphicon-trash(aria-hidden="true")
+              |  
+              a(href="/admin/article/" + article._id + "/delete" title="Удалить статью" onclick="return confirm('Точно удаляем?')") Удалить статью
         hr

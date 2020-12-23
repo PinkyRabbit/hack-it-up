@@ -7,6 +7,7 @@ const inputOptions = {
 };
 
 function logOnError(error) {
+  // eslint-disable-next-line no-console
   console.error(error);
 }
 
@@ -240,6 +241,7 @@ function save(editor) {
     data: form,
     dataType: 'json',
     success: () => {
+      // eslint-disable-next-line no-console
       console.log(`Autosave ${(new Date()).toLocaleString()}`);
     },
     error: logOnError,
@@ -247,8 +249,12 @@ function save(editor) {
 }
 
 function autosave(editor) {
-  // @TODO: add auto trim
   setInterval(() => save(editor), 6000);
+}
+
+function onFormSubmit(editor) {
+  const content = editor.container.firstChild.innerHTML;
+  $('#content').val(content);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -259,4 +265,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initImage();
   const editor = addEditor();
   autosave(editor);
+  $('#edit-article-form').on('submit', () => onFormSubmit(editor));
 });

@@ -12,7 +12,14 @@ block content
     function hideForm() {
       $('#admin-tag-form').addClass('hidden');
     }
-  form#admin-tag-form.hidden.form-inline(action="/admin/tag" method="POST" onsubmit="hideForm()")
+    function deleteTag(tag) {
+      const confirmed = confirm(`Точно удалить тег "${tag.name}"`);
+      if (confirm) {
+        window.location.replace(`/admin/tag/${tag._id}/delete`);
+      }
+      this.pre
+    }
+  form#admin-tag-form.hidden.form-inline(action="/admin/tag" method="POST" onsubmit="hideForm();")
     .form-group
       .input-group
         span.input-group-addon Title
@@ -28,5 +35,7 @@ block content
   else
     each tag, index in tags
       -var stringifyTag = JSON.stringify(tag);
-      button.btn.btn-link(type="button" tag._id title="Редактировать " + tag.name onclick="editTag(" + stringifyTag+ ")")
+      button.btn.btn-link(type="button" tag._id title="Редактировать " + tag.name onclick="editTag(" + stringifyTag+ ")" oncontextmenu="deleteTag(" + stringifyTag+ ");  return false;")
         | #{tag.name}
+    hr
+    .alert(role="alert") Чтобы редактировать - нажмите левой, удалить - нажмите правой.

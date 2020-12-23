@@ -25,10 +25,9 @@ const projectForFullArticle = {
       description: 1,
       keywords: 1,
       image: 1,
-      body: 1,
+      content: 1,
       tags: 1,
       category: 1,
-      categories: 1,
       isPublished: 1,
       createdAt: 1,
       updatedAt: 1,
@@ -44,15 +43,7 @@ const projectForFeed = {
       description: 1,
       image: 1,
       tags: 1,
-      category: {
-        $cond: {
-          if: '$categories',
-          then: '$categories',
-          else: {
-            name: '$category',
-          },
-        },
-      },
+      category: 1,
       isPublished: 1,
       createdAt: 1,
       updatedAt: 1,
@@ -82,22 +73,52 @@ function getFullArticleById(_id) {
   });
 }
 
+function getFullArticleBySlug(slug, categoryId) {
+  return new Promise((resolve, reject) => {
+    const aggregation = [...defaultLookupsForAggregation];
+    aggregation.unshift({
+      $match: {
+        slug,
+        category: categoryId,
+      },
+    });
+    aggregation.push(projectForFullArticle);
+    ArticleCollection
+      .aggregate(aggregation)
+      .then((articles) => resolve(articles[0]))
+      .catch((err) => reject(err));
+  });
+}
+
+/**
+ * Method to create aggregation to get articles for news feed.
+ * @param {*} page - number of the page
+ * @param {*} filter - unpublished - boolean, category - should contain categoryId,
+ * tag = should contain tagId
+ */
 function getArticlesForFeed(page = 1, filter = {}) {
   const articlesLimit = 10;
   const offset = articlesLimit * (page - 1);
   const aggregation = [...defaultLookupsForAggregation];
-  aggregation.unshift({ $match: { isPublished: true } });
   aggregation.push(projectForFeed);
-  if (filter.categorySlug) {
-    aggregation.push({ $match: filter });
-  }
   aggregation.push({ $limit: (articlesLimit * page) });
   aggregation.push({ $skip: offset });
   aggregation.push({ $sort: { updatedAt: -1 } });
+  // filters
+  const $match = {};
+  $match.isPublished = !filter.unpublished;
+  if (filter.category) {
+    $match.category = mongodbId(filter.category);
+  }
+  if (filter.tag) {
+    $match.tag = mongodbId(filter.tag);
+  }
+  aggregation.unshift({ $match });
   return ArticleCollection.aggregate(aggregation);
 }
 
 module.exports = {
   getFullArticleById,
+  getFullArticleBySlug,
   getArticlesForFeed,
 };

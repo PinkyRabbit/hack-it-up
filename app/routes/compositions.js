@@ -1,6 +1,6 @@
 const csrf = require('csurf');
 
-const pages = require('../pages');
+const controller = require('../controller');
 const validators = require('../validators');
 const { uploadArticleImage } = require('../middleware/multer');
 
@@ -13,113 +13,120 @@ function mockSessionValidator(req, res, next) {
 
 const routerCompositionTo = {
   getHomePage: [
-    pages.getHomePage,
+    controller.getHomePage,
   ],
   getCategory: [
     validators.categorySlugValidator,
-    pages.getCategory,
+    controller.getCategory,
   ],
   getArticleAsUser: [
     validators.articleAndCategorySlugsValidator,
-    pages.getArticleBySlug,
+    controller.getArticleBySlug,
   ],
   getArticleAsAdmin: [
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.getArticleById,
+    controller.getArticleById,
   ],
   getStaticPage: [
-    pages.getStatic,
+    controller.getStatic,
   ],
   getUnpublishedArticles: [
     mockSessionValidator,
-    pages.getUnpublished,
+    controller.getUnpublished,
   ],
   createArticle: [
     mockSessionValidator,
-    pages.createArticle,
+    controller.createArticle,
   ],
   getEditArticlePage: [
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.getEditArticlePage,
+    controller.getEditArticlePage,
   ],
   autosave: [
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.autosaveArticle,
+    controller.autosaveArticle,
   ],
   saveArticle: [
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.saveArticle,
+    controller.saveArticle,
   ],
   updateArticleImage: [
     mockSessionValidator,
     validators.articleIdValidator,
     uploadArticleImage,
-    pages.updateArticleImage,
+    controller.updateArticleImage,
   ],
   publishArticle: [
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.publish,
+    controller.extractArticle,
+    validators.articleValidator,
+    controller.publish,
   ],
   deleteArticle: [
     mockSessionValidator,
     validators.articleIdValidator,
-    pages.deleteArticle,
+    controller.deleteArticle,
   ],
   getLoginPage: [
     csrfProtection,
-    pages.loginPage,
+    controller.loginPage,
   ],
   sendLoginRequest: [
     csrfProtection,
-    pages.loginRequest,
+    controller.loginRequest,
   ],
   manageCategories: [
     mockSessionValidator,
-    pages.manageCategories,
+    controller.manageCategories,
   ],
   createCategory: [
     mockSessionValidator,
     validators.categoryValidator,
-    pages.createCategory,
+    controller.createCategory,
   ],
   updateCategory: [
     mockSessionValidator,
     validators.categoryIdValidator,
     validators.categoryValidator,
-    pages.updateCategory,
+    controller.updateCategory,
   ],
   deleteCategory: [
     mockSessionValidator,
     validators.categoryIdValidator,
-    pages.deleteCategory,
+    controller.deleteCategory,
   ],
   manageTags: [
     mockSessionValidator,
-    pages.manageTags,
+    controller.manageTags,
   ],
   searchTag: [
     mockSessionValidator,
     validators.searchValidator,
-    pages.searchTagRequest,
+    controller.searchTagRequest,
   ],
   createANewTag: [
     mockSessionValidator,
-    pages.createANewTag,
+    controller.createANewTag,
   ],
   updateTag: [
     mockSessionValidator,
     validators.tagIdValidator,
     validators.tagValidator,
-    pages.updateTag,
+    controller.updateTag,
+  ],
+  deleteTag: [
+    mockSessionValidator,
+    validators.tagIdValidator,
+    controller.deleteTag,
   ],
   getArticlesByTag: [
     validators.tagSlugValidator,
-    pages.getArticlesByTag,
+    controller.getArticlesByTag,
   ],
 };
 

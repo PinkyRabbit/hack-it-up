@@ -3,28 +3,23 @@ const fs = require('fs').promises;
 const path = require('path');
 const createError = require('http-errors');
 
-const { getFullArticleById, getArticlesForFeed } = require('../database.methods');
-
-const pagesOptions = require('../../pages.json');
-const fakeAritcles = require('../articles.json');
-const { ArticleCollection, CategoryCollection } = require('../database');
-
-// @FIXME: should be in constants
-const reservedSlugs = [
-  'login',
-  'unpublished',
-  'about-me',
-  'article',
-];
+const db = require('../database.methods');
+const { CategoryCollection, TagCollection } = require('../database');
+const { reservedCategorySlugs } = require('../routes/constants');
 
 /**
  * Get home page / news feed
  */
-function getHomePage(req, res) {
-  return res.render('news-feed', {
-    page: pagesOptions.main,
-    articles: fakeAritcles,
-  });
+async function getHomePage(req, res) {
+  const page = {
+    title: 'Главная',
+    keywords: 'nodejs, программирование, блог',
+    description: 'Этот блог родился, когда я делал первые шаги в NodeJS. В нём я публикую свои мысли и заметки про программирование и лучше писать код.',
+    h1: 'Hello world!',
+    image: 'd/main.jpg',
+  };
+  const articles = await db.getArticlesForFeed(1);
+  return res.render('news-feed', { page, articles });
 }
 
 /**
@@ -32,10 +27,14 @@ function getHomePage(req, res) {
  */
 async function getArticleBySlug(req, res, next) {
   const { categorySlug, articleSlug } = req.params;
-  if (reservedSlugs.includes(categorySlug)) {
+  if (reservedCategorySlugs.includes(categorySlug)) {
     return next();
   }
-  const article = await ArticleCollection.findOne({ slug: articleSlug });
+  const category = await CategoryCollection.findOne({ slug: categorySlug });
+  if (!category) {
+    return next();
+  }
+  const article = await db.getFullArticleBySlug(articleSlug, category._id);
   if (!article) {
     // should return next cuz article could be taken also by id
     return next();
@@ -48,7 +47,7 @@ async function getArticleBySlug(req, res, next) {
  */
 async function getArticleById(req, res, next) {
   const { articleId } = req.params;
-  const article = await getFullArticleById(articleId);
+  const article = await db.getFullArticleById(articleId);
   if (!article) {
     return next(createError(404, 'Страница не существует'));
   }
@@ -60,11 +59,11 @@ async function getArticleById(req, res, next) {
  */
 async function getCategory(req, res, next) {
   const { categorySlug } = req.params;
-  if (reservedSlugs.includes(categorySlug)) {
+  if (reservedCategorySlugs.includes(categorySlug)) {
     return next();
   }
   const category = await CategoryCollection.findOne({ slug: categorySlug });
-  const articles = await getArticlesForFeed(1);
+  const articles = await db.getArticlesForFeed(1, { category: category._id });
 
   const page = {
     h1: category.name,
@@ -79,15 +78,41 @@ async function getCategory(req, res, next) {
  * Get all unpublished articles
  */
 async function getUnpublished(req, res) {
-  const articles = await ArticleCollection.find({});
+  const articles = await db.getArticlesForFeed(1, { unpublished: true });
   const page = {
-    ...pagesOptions.main,
     h1: 'Неопубликованное',
     title: 'Неопубликованное',
     description: 'Неопубликованные статьи сайта',
     image: '/d/unpublished.jpg',
   };
   return res.render('news-feed', { page, articles, isUnpublished: true });
+}
+
+/**
+ * For articles feed by tag slug.
+ */
+async function getArticlesByTag(req, res, next) {
+  const { tagSlug } = req.params;
+
+  const tag = await TagCollection.findOne({ slug: tagSlug });
+  if (!tag) {
+    return next(createError(404, 'Страница не существует'));
+  }
+
+  const articles = await db.getArticlesForFeed(1, { tag: tag._id });
+
+  const page = {
+    title: `Тег ${tag.name}`,
+    keywords: tag.name,
+    description: `Эта страница посвящена ${tag.name}. Блог разработчика. Программирование - интересное приключение.`,
+    h1: `Тег ${tag.name}`,
+    image: 'd/main.jpg',
+  };
+
+  return res.render('news-feed', {
+    page,
+    articles,
+  });
 }
 
 /**
@@ -100,7 +125,7 @@ async function aboutMePage(res) {
     title: 'Introduce',
     h1: 'Пару слов обо мне',
     keywords: 'NodeJS, разработчик, резюме',
-    description: 'Пару слов обо мне. Эта страничка оформлена в виде "рассказа" о себе и не несёт рекламный характер. Это не CV.',
+    description: 'Пару слов обо мне. Эта страничка оформлена в виде рассказа о себе и не несёт рекламный характер. Это не CV.',
     image: '/d/about-me.jpg',
     content: marked(aboutMeMarkup),
   };
@@ -147,9 +172,10 @@ async function getStatic(req, res, next) {
 
 module.exports = {
   getHomePage,
-  getCategory,
   getArticleBySlug,
   getArticleById,
+  getCategory,
+  getArticlesByTag,
   getUnpublished,
   getStatic,
 };

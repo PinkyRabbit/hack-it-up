@@ -106,6 +106,9 @@ a.category-name:focus{
 #editor-wrapper {
   margin: 20px 0;
 }
+#editor {
+  height: 400px;
+}
 .navbar{
   margin-bottom: 0;
 }
