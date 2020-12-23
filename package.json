@@ -2,7 +2,8 @@
   "main": "app/index.js",
   "scripts": {
     "start": "NODE_ENV=production node app/index.js",
-    "dev": "NODE_ENV=development nodemon app/index.js"
+    "dev": "NODE_ENV=development nodemon app/index.js",
+    "test:e2e": "cypress open -b chromium"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -25,8 +26,10 @@
     "transliteration.cyr": "^1.0.5"
   },
   "devDependencies": {
+    "cypress": "^6.2.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.5.1",

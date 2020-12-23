@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://localhost:8080",
+  "integrationFolder": "e2e",
+  "testFiles": "**/*.e2e.test.js",
+  "video": false
+}

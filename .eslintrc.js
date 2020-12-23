@@ -1,6 +1,7 @@
 module.exports = {
   extends: [
     'airbnb-base',
+    'plugin:cypress/recommended',
   ],
   parserOptions: {
     sourceType: 'module',
