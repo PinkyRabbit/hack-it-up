@@ -30,6 +30,7 @@ function initRoutes(app) {
     .get('/unpublished', routerCompositionTo.getUnpublishedArticles)
     .get('/login', routerCompositionTo.getLoginPage)
     .post('/login', routerCompositionTo.sendLoginRequest)
+    .get('/admin/logout', routerCompositionTo.logout)
     .get('/tag/:tagSlug', routerCompositionTo.getArticlesByTag)
     .get('/:categorySlug/:articleSlug', routerCompositionTo.getArticleAsUser)
     .get('/:staticPageSlug', routerCompositionTo.getStaticPage)

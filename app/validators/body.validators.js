@@ -28,6 +28,7 @@ module.exports = {
     body('body', 'Текст статьи не может быть пустым.').trim().not().isEmpty(),
     body('category', 'Категория не выбрана.').trim().not().isEmpty(),
     body('tags', 'Нужно выбрать хотя бы 1 тег.').isArray({ min: 1 }),
+    redirectIfInvalid,
   ],
   tagValidator: [
     body('name', 'Имя тега должно быть от 1 до 15 символов.').trim().isLength({ min: 1, max: 15 }),
@@ -39,6 +40,11 @@ module.exports = {
   categoryValidator: [
     body('name', 'Имя категории должно быть от 1 до 40 символов.').trim().isLength({ min: 1, max: 40 }),
     body('description', 'Размер описания должен быть от 40 до 140 символов.').trim().isLength({ min: 40, max: 140 }),
+    redirectIfInvalid,
+  ],
+  loginValidator: [
+    body('email', 'Опечатка в почте').isEmail(),
+    body('email', 'Пустой пароль').not().isEmpty(),
     redirectIfInvalid,
   ],
 };

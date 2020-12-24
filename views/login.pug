@@ -10,10 +10,10 @@ block content
       input(type="hidden" name="_csrf" value= csrfToken || 'was not set')
       .form-group
         label(for="email") Email address
-        input.form-control(placeholder="Email" type="email")
+        input.form-control(placeholder="Email" type="email" name="email")
       .form-group
         label(for="password") Password
-        input.form-control(placeholder="Password" type="password")
+        input.form-control(placeholder="Password" type="password" name="password")
       if recaptchaFront
         .form-group
           .g-recaptcha(data-sitekey=recaptchaFront)

@@ -2,14 +2,11 @@ const csrf = require('csurf');
 
 const controller = require('../controller');
 const validators = require('../validators');
+const recaptchaTest = require('../middleware/recaptcha');
 const { uploadArticleImage } = require('../middleware/multer');
+const { isAuthenticated } = require('../middleware/auth');
 
 const csrfProtection = csrf({ cookie: true });
-
-// @NOTE: should be replaced with correct method
-function mockSessionValidator(req, res, next) {
-  return next();
-}
 
 const routerCompositionTo = {
   getHomePage: [
@@ -24,7 +21,7 @@ const routerCompositionTo = {
     controller.getArticleBySlug,
   ],
   getArticleAsAdmin: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.articleIdValidator,
     controller.getArticleById,
   ],
@@ -32,43 +29,43 @@ const routerCompositionTo = {
     controller.getStatic,
   ],
   getUnpublishedArticles: [
-    mockSessionValidator,
+    isAuthenticated,
     controller.getUnpublished,
   ],
   createArticle: [
-    mockSessionValidator,
+    isAuthenticated,
     controller.createArticle,
   ],
   getEditArticlePage: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.articleIdValidator,
     controller.getEditArticlePage,
   ],
   autosave: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.articleIdValidator,
     controller.autosaveArticle,
   ],
   saveArticle: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.articleIdValidator,
     controller.saveArticle,
   ],
   updateArticleImage: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.articleIdValidator,
     uploadArticleImage,
     controller.updateArticleImage,
   ],
   publishArticle: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.articleIdValidator,
     controller.extractArticle,
     validators.articleValidator,
     controller.publish,
   ],
   deleteArticle: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.articleIdValidator,
     controller.deleteArticle,
   ],
@@ -78,49 +75,55 @@ const routerCompositionTo = {
   ],
   sendLoginRequest: [
     csrfProtection,
+    recaptchaTest,
+    validators.loginValidator,
     controller.loginRequest,
   ],
+  logout: [
+    isAuthenticated,
+    controller.logout,
+  ],
   manageCategories: [
-    mockSessionValidator,
+    isAuthenticated,
     controller.manageCategories,
   ],
   createCategory: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.categoryValidator,
     controller.createCategory,
   ],
   updateCategory: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.categoryIdValidator,
     validators.categoryValidator,
     controller.updateCategory,
   ],
   deleteCategory: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.categoryIdValidator,
     controller.deleteCategory,
   ],
   manageTags: [
-    mockSessionValidator,
+    isAuthenticated,
     controller.manageTags,
   ],
   searchTag: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.searchValidator,
     controller.searchTagRequest,
   ],
   createANewTag: [
-    mockSessionValidator,
+    isAuthenticated,
     controller.createANewTag,
   ],
   updateTag: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.tagIdValidator,
     validators.tagValidator,
     controller.updateTag,
   ],
   deleteTag: [
-    mockSessionValidator,
+    isAuthenticated,
     validators.tagIdValidator,
     controller.deleteTag,
   ],

@@ -23,7 +23,9 @@
         "console": "integratedTerminal",
         "internalConsoleOptions": "neverOpen",
         "env": {
-          "NODE_ENV": "development"
+          "NODE_ENV": "development",
+          "ADMIN_EMAIL": "admin@gmail.com",
+          "ADMIN_PASSWORD": "asdqwe"
         }
     }
   ]
