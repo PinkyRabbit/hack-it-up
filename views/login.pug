@@ -2,7 +2,7 @@
 extends layout/main.pug
 
 block content
-  .jumbotron
+  .jumbotron#login-form
     h2 Привет!
     em Мы с тобой – люди Темной Стороны, а там, откуда мы пришли, мы всего лишь гости, странные незнакомцы, которых кое-как терпят…
     hr
@@ -17,6 +17,7 @@ block content
       if recaptchaFront
         .form-group
           .g-recaptcha(data-sitekey=recaptchaFront)
+        script(type='text/javascript', src='https://www.google.com/recaptcha/api.js')
       else
         .alert(class="alert-default" role='alert' style='margin-bottom: 10px')
           span.glyphicon.glyphicon-info-sign(aria-hidden="true")

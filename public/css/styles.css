@@ -149,6 +149,10 @@ a.btn-default{
 .tag-cloud a {
   color: #853a5e!important;
 }
+#login-form {
+  width: 80%;
+  margin: 0 auto;
+}
 
 /* spinner */
 #img-spinner{

@@ -122,6 +122,7 @@ async function aboutMePage(res) {
   const aboutMeFile = path.join(__dirname, '../../static/about-me.md');
   const aboutMeMarkup = await fs.readFile(aboutMeFile, 'utf-8');
   const page = {
+    isStatic: true,
     title: 'Introduce',
     h1: 'Пару слов обо мне',
     keywords: 'NodeJS, разработчик, резюме',
@@ -139,6 +140,7 @@ async function offersPage(res) {
   const aboutMeFile = path.join(__dirname, '../../static/offers.md');
   const offersMarkup = await fs.readFile(aboutMeFile, 'utf-8');
   const page = {
+    isStatic: true,
     title: 'Introduce',
     h1: 'Я рекомендую',
     keywords: 'NodeJS программы софт',
