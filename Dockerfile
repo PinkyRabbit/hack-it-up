@@ -1,5 +1,5 @@
 FROM node:14-slim as production
-EXPOSE 3000
+EXPOSE 80
 WORKDIR /usr/src/app
 COPY package.json package-lock.json* ./ 
 RUN npm install --only=production \

@@ -31,7 +31,9 @@ initFlash(app);
 initGlobals(app);
 initRoutes(app);
 
-app.listen(3000, () => {
+const port = process.env.PORT || 80;
+
+app.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log('App listening at http://localhost:3000');
+  console.log(`App listening at http://localhost:${port}`);
 });
