@@ -1,0 +1,20 @@
+# git
+.git
+.gitignore
+# ide
+.vscode
+# e2e
+e2e
+cypress
+cypress.json
+# eslint
+.eslintrc
+.eslintcache
+# default
+node_modules
+*Dockerfile*
+*docker-compose*
+# misc
+.env.sample
+LICENSE
+README.md
