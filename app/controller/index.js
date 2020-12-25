@@ -1,14 +1,11 @@
-const publicPages = require('./public');
-const articleEditor = require('./admin.article-editor');
-const manageCategoriesAndTags = require('./admin.categories-and-tags');
-const other = require('./other');
-
-// @FIXME: show categories without description!
-// @FIXME: show tags without description!
+const publicController = require('./public.controller');
+const articleController = require('./admin.article.controller');
+const categoryController = require('./admin.category.controller');
+const tagController = require('./admin.tag.controller');
 
 module.exports = {
-  ...publicPages,
-  ...articleEditor,
-  ...manageCategoriesAndTags,
-  ...other,
+  ...publicController,
+  ...articleController,
+  ...categoryController,
+  ...tagController,
 };
