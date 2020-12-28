@@ -1,3 +1,3 @@
 module.exports.reservedCategorySlugs = [
-  'admin', 'article', 'unpublished', 'login', 'tag',
+  'admin', 'article', 'unpublished', 'login', 'tag', 'search',
 ];

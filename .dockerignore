@@ -1,5 +1,6 @@
 # git
 .git
+.github
 .gitignore
 # ide
 .vscode

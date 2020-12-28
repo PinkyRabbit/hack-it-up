@@ -131,6 +131,10 @@ const routerCompositionTo = {
     validators.tagSlugValidator,
     controller.getArticlesByTag,
   ],
+  searchArticle: [
+    validators.searchValidator,
+    controller.searchArticle,
+  ],
 };
 
 module.exports = { routerCompositionTo };

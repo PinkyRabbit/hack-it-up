@@ -5,7 +5,7 @@ const createError = require('http-errors');
 const passport = require('passport');
 
 const db = require('../database.methods');
-const { CategoryCollection, TagCollection } = require('../database');
+const { ArticleCollection, CategoryCollection, TagCollection } = require('../database');
 const { reservedCategorySlugs } = require('../routes/constants');
 
 /**
@@ -224,6 +224,44 @@ function logout(req, res) {
   return res.redirect('/');
 }
 
+/**
+ * Search in top of the site.
+ */
+async function searchArticle(req, res) {
+  const { search } = req.query;
+  // eslint-disable-next-line no-useless-escape
+  const re = `.*${search.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}.*`;
+  const articles = await ArticleCollection.find({
+    $and: [
+      { isPublished: true },
+      {
+        $or: [
+          { h1: { $regex: re, $options: 'i' } },
+          { title: { $regex: re, $options: 'i' } },
+          { description: { $regex: re, $options: 'i' } },
+          { keywords: { $regex: re, $options: 'i' } },
+        ],
+      },
+    ],
+  });
+  if (!articles || !articles.length) {
+    return res.json([]);
+  }
+  const firstFiveArticles = articles.slice(0, 5);
+  const categoryIdArray = firstFiveArticles.map((article) => article.category);
+  const categories = await CategoryCollection.find({ _id: { $in: categoryIdArray } });
+  const result = firstFiveArticles.map((article) => {
+    const relatedCategory = categories.find((category) => `${category._id}` === `${article.category}`);
+    const categorySlug = relatedCategory ? relatedCategory.slug : 'unknown';
+    return {
+      categorySlug,
+      articleSlug: article.slug,
+      h1: article.h1,
+    };
+  });
+  return res.json(result);
+}
+
 module.exports = {
   getHomePage,
   getArticleBySlug,
@@ -235,4 +273,5 @@ module.exports = {
   loginPage,
   loginRequest,
   logout,
+  searchArticle,
 };
