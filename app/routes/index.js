@@ -32,6 +32,7 @@ function initRoutes(app) {
     .post('/login', routerCompositionTo.sendLoginRequest)
     .get('/admin/logout', routerCompositionTo.logout)
     .get('/tag/:tagSlug', routerCompositionTo.getArticlesByTag)
+    .get('/search', routerCompositionTo.searchArticle)
     .get('/:categorySlug/:articleSlug', routerCompositionTo.getArticleAsUser)
     .get('/:staticPageSlug', routerCompositionTo.getStaticPage)
     .get('/:categorySlug', routerCompositionTo.getCategory);

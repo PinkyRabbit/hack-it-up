@@ -153,6 +153,25 @@ a.btn-default{
   width: 80%;
   margin: 0 auto;
 }
+#search {
+   background: none;
+   border: none;
+   margin-top: 10px;
+   margin-right: 10px;
+   border-bottom: 1px solid #876e69;
+   color: #f5efbd;
+   font-size: 1.3em;
+   text-align: center;
+}
+#search:focus{
+   outline: none;
+}
+#search-menu {
+  position: absolute;
+  z-index: 1;
+  top: 50px;
+  right: 10px;
+}
 
 /* spinner */
 #img-spinner{

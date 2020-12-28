@@ -52,8 +52,8 @@ html(lang='ru')
               a(href="/about-me" title="Обо мне") Обо мне
             li
               a(href="/offers" title="Различные рефералочки") Я рекомендую
-          if isAdmin
-            ul.nav.navbar-nav.pull-right
+          ul.nav.navbar-nav.pull-right
+            if isAdmin
               li
                 a(href="/admin/categories" title="Управление категориями")
                   span.glyphicon.glyphicon-book(aria-hidden="true")
@@ -69,6 +69,10 @@ html(lang='ru')
               li
                 a(href="/admin/logout" title="Выйти")
                   span.glyphicon.glyphicon-log-out(aria-hidden="true")
+            else
+              li
+                input#search(placeholder="Используйте поиск" autocomplete="off")
+              .list-group#search-menu
       header
         div
           if page.image
@@ -84,6 +88,7 @@ html(lang='ru')
                 .alert(class="alert-" + message.type role='alert' style='margin-bottom: 10px')!= message.msg
             block content
           aside.col-xs-12.col-sm-3
+            //- Tags 
             if cloudTags && cloudTags.length
               - var tagColors = ["success", "info", "active", "warning", "danger"];
               hr
@@ -98,6 +103,9 @@ html(lang='ru')
                       a(href="/tag/" + tag.slug)
                         span.glyphicon.glyphicon-tag(aria-hidden="true")
                         | #{tag.name}
+            //- Twitter
+            a.twitter-timeline(data-tweet-limit="10" href="https://twitter.com/pinkya_rabbit") Tweets by @pinkya_rabbit
+            script(async src="https://platform.twitter.com/widgets.js" charset="utf-8")
     footer
       .container
         .row
@@ -109,3 +117,4 @@ html(lang='ru')
     script(src='/js/jquery-1.12.4.min.js')
     // Include all compiled plugins (below), or include individual files as needed
     script(src='/js/bootstrap.min.js')
+    script(src='/js/scripts.js')
