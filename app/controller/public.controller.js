@@ -2,9 +2,10 @@ const marked = require('marked');
 const fs = require('fs').promises;
 const path = require('path');
 const createError = require('http-errors');
+const passport = require('passport');
 
 const db = require('../database.methods');
-const { CategoryCollection, TagCollection } = require('../database');
+const { ArticleCollection, CategoryCollection, TagCollection } = require('../database');
 const { reservedCategorySlugs } = require('../routes/constants');
 
 /**
@@ -172,6 +173,95 @@ async function getStatic(req, res, next) {
   return await staticPageFunction();
 }
 
+const recaptchaFront = process.env.RECAPTCHA_FRONT;
+
+/**
+ * Get login page.
+ */
+function loginPage(req, res) {
+  const csrfToken = req.csrfToken();
+  const page = {
+    title: 'Вход...',
+    description: 'Нечего тебе тут делать, дорогой друг :)',
+    h1: 'Дорога в эхо',
+    image: 'd/login.jpg',
+  };
+  return res.render('login', {
+    page,
+    recaptchaFront,
+    csrfToken,
+  });
+}
+
+/**
+ * Login with passport.
+ */
+function loginRequest(req, res, next) {
+  return passport.authenticate('local', (error, uuid, msg) => {
+    if (error) {
+      next(error);
+    }
+    if (msg) {
+      req.flash('info', msg.message);
+      return res.redirect('back');
+    }
+    return req.logIn(uuid, (err) => {
+      if (err) return next(err);
+      return req.session.save(() => {
+        req.flash('success', 'Вижу вас как на яву!');
+        res.redirect('/');
+      });
+    });
+  })(req, res, next);
+}
+
+/**
+ * Logout method.
+ */
+function logout(req, res) {
+  req.logout();
+  req.flash('info', 'Вы вышли. Никогда не знаешь где тебе повезёт!');
+  return res.redirect('/');
+}
+
+/**
+ * Search in top of the site.
+ */
+async function searchArticle(req, res) {
+  const { search } = req.query;
+  // eslint-disable-next-line no-useless-escape
+  const re = `.*${search.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}.*`;
+  const articles = await ArticleCollection.find({
+    $and: [
+      { isPublished: true },
+      {
+        $or: [
+          { h1: { $regex: re, $options: 'i' } },
+          { title: { $regex: re, $options: 'i' } },
+          { description: { $regex: re, $options: 'i' } },
+          { keywords: { $regex: re, $options: 'i' } },
+        ],
+      },
+    ],
+  });
+  if (!articles || !articles.length) {
+    return res.json([]);
+  }
+  const firstFiveArticles = articles.slice(0, 5);
+  const categoryIdArray = firstFiveArticles.map((article) => article.category);
+  const categories = await CategoryCollection.find({ _id: { $in: categoryIdArray } });
+  const result = firstFiveArticles.map((article) => {
+    const relatedCategory = categories.find((category) => `${category._id}` === `${article.category}`);
+    const categorySlug = relatedCategory ? relatedCategory.slug : 'unknown';
+    return {
+      categorySlug,
+      articleSlug: article.slug,
+      h1: article.h1,
+    };
+  });
+  return res.json(result);
+}
+
 module.exports = {
   getHomePage,
   getArticleBySlug,
@@ -180,4 +270,8 @@ module.exports = {
   getArticlesByTag,
   getUnpublished,
   getStatic,
+  loginPage,
+  loginRequest,
+  logout,
+  searchArticle,
 };
