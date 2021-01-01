@@ -10,7 +10,7 @@ function Article(props) {
   this.content = props.content || '';
   this.image = props.image || '';
   this.tags = props.tags || [];
-  this.category = mongodbId(props.category) || null;
+  this.category = props.category ? mongodbId(props.category) : null;
 }
 
 function Tag(tagName) {
