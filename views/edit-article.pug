@@ -56,7 +56,7 @@ block content
             | #{tag.name}
     #editor-wrapper
       #editor!= content
-      input#content(name="content" type="hidden" value=content)
+      input#content-input(name="content" type="hidden" value=content)
     .form-group
       -var ap = article.image ? article.image.split('/') : [''];
       -var articleImageValue = ap[ap.length - 1];

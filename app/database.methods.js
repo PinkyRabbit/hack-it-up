@@ -71,6 +71,9 @@ function getFullArticleById(_id) {
     ArticleCollection
       .aggregate(aggregation)
       .then((articles) => {
+        if (!articles || !articles.length) {
+          resolve(null);
+        }
         const [article] = articles;
         article.image = article.image ? imagePath + article.image : null;
         resolve(article);
@@ -79,7 +82,7 @@ function getFullArticleById(_id) {
   });
 }
 
-function getFullArticleBySlug(slug, categoryId) {
+function getFullArticleBySlug(slug, categoryId, onlyPublished) {
   return new Promise((resolve, reject) => {
     const aggregation = [...defaultLookupsForAggregation];
     aggregation.unshift({
@@ -89,9 +92,15 @@ function getFullArticleBySlug(slug, categoryId) {
       },
     });
     aggregation.push(projectForFullArticle);
+    if (onlyPublished) {
+      aggregation.unshift({ $match: { isPublished: true } });
+    }
     ArticleCollection
       .aggregate(aggregation)
       .then((articles) => {
+        if (!articles || !articles.length) {
+          resolve(null);
+        }
         const [article] = articles;
         article.image = article.image ? imagePath + article.image : null;
         resolve(article);
@@ -128,6 +137,7 @@ function getArticlesForFeed(page = 1, filter = {}) {
     .then((articles) => articles.map((article) => ({
       ...article,
       image: article.image ? imagePath + article.image : null,
+      createdAt: (article.createdAt.split('T'))[0].split('-').reverse().join('.'),
     })));
 }
 

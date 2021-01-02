@@ -252,11 +252,6 @@ function autosave(editor) {
   setInterval(() => save(editor), 6000);
 }
 
-function onFormSubmit(editor) {
-  const content = editor.container.firstChild.innerHTML;
-  $('#content').val(content);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const inputs = Object.keys(inputOptions);
   inputs.forEach((name) => delayedInputValidation(name));
@@ -265,5 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initImage();
   const editor = addEditor();
   autosave(editor);
-  $('#edit-article-form').on('submit', () => onFormSubmit(editor));
+  $('#edit-article-form').on('submit', (e) => {
+    const content = editor.container.firstChild.innerHTML;
+    $('#content-input').val(content);
+  });
 });

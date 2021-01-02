@@ -35,7 +35,7 @@ async function getArticleBySlug(req, res, next) {
   if (!category) {
     return next();
   }
-  const article = await db.getFullArticleBySlug(articleSlug, category._id);
+  const article = await db.getFullArticleBySlug(articleSlug, category._id, !req.user);
   if (!article) {
     // should return next cuz article could be taken also by id
     return next();
