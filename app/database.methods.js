@@ -130,7 +130,7 @@ function getArticlesForFeed(page = 1, filter = {}) {
     $match.category = mongodbId(filter.category);
   }
   if (filter.tag) {
-    $match.tag = mongodbId(filter.tag);
+    $match.tags = mongodbId(filter.tag);
   }
   aggregation.unshift({ $match });
   return ArticleCollection.aggregate(aggregation)
