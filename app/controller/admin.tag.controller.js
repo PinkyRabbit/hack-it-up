@@ -11,7 +11,7 @@ async function manageTags(req, res) {
     page: {
       title: 'Управление тегами',
       h1: 'Управление тегами',
-      image: 'd/admin.jpg',
+      image: '/images/admin.jpg',
     },
   });
 }

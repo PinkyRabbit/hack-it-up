@@ -9,7 +9,7 @@ function publicOutput(err, req, res) {
     title: '404',
     description: 'Такой страницы не существует! Ошибка!',
     h1: 'Ой! Ошибка!',
-    image: 'd/404.jpg',
+    image: '/images/404.jpg',
   };
   res.status(404).render('error-public', { page });
 }
@@ -17,7 +17,7 @@ function publicOutput(err, req, res) {
 function developmentOutput(err, req, res) {
   const page = {
     description: 'Такой страницы не существует! Ошибка!',
-    image: 'd/404.jpg',
+    image: '/images/404.jpg',
     h1: `Ошибка ${err.status || 'без статуса (500)'}`,
     title: err.status,
   };

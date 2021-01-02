@@ -58,7 +58,9 @@ block content
       #editor!= content
       input#content(name="content" type="hidden" value=content)
     .form-group
-      input#body(name="image" type="hidden" value=article.image)
+      -var ap = article.image ? article.image.split('/') : [''];
+      -var articleImageValue = ap[ap.length - 1];
+      input#body(name="image" type="hidden" value=articleImageValue)
       #img-spinner(style="display: none")
         .lds-spinner
           - for (var i = 0; i < 12; ++i) {
@@ -66,7 +68,7 @@ block content
           - }
       label(for="img-button") Изображение статьи
       if article.image
-        img.img-responsive#img-preview(src="/images/" + article.image alt="Главное изображение статьи")
+        img.img-responsive#img-preview(src=article.image alt="Главное изображение статьи")
         button.btn.btn-default.btn-lg.btn-block#img-button(type="button") Заменить изображение
       else
         button.btn.btn-success.btn-lg.btn-block#img-button(type="button") Загрузить изображение

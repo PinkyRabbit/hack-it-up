@@ -1,5 +1,7 @@
 const { ArticleCollection, mongodbId } = require('./database');
 
+const imagePath = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/`;
+
 const join = {
   tags: {
     from: 'tags',
@@ -68,7 +70,11 @@ function getFullArticleById(_id) {
     aggregation.push(projectForFullArticle);
     ArticleCollection
       .aggregate(aggregation)
-      .then((articles) => resolve(articles[0]))
+      .then((articles) => {
+        const [article] = articles;
+        article.image = article.image ? imagePath + article.image : null;
+        resolve(article);
+      })
       .catch((err) => reject(err));
   });
 }
@@ -85,7 +91,11 @@ function getFullArticleBySlug(slug, categoryId) {
     aggregation.push(projectForFullArticle);
     ArticleCollection
       .aggregate(aggregation)
-      .then((articles) => resolve(articles[0]))
+      .then((articles) => {
+        const [article] = articles;
+        article.image = article.image ? imagePath + article.image : null;
+        resolve(article);
+      })
       .catch((err) => reject(err));
   });
 }
@@ -114,7 +124,11 @@ function getArticlesForFeed(page = 1, filter = {}) {
     $match.tag = mongodbId(filter.tag);
   }
   aggregation.unshift({ $match });
-  return ArticleCollection.aggregate(aggregation);
+  return ArticleCollection.aggregate(aggregation)
+    .then((articles) => articles.map((article) => ({
+      ...article,
+      image: article.image ? imagePath + article.image : null,
+    })));
 }
 
 module.exports = {

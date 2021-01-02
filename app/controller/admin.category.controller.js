@@ -11,7 +11,7 @@ async function manageCategories(req, res) {
     page: {
       title: 'Управление категориями',
       h1: 'Управление категориями',
-      image: 'd/admin.jpg',
+      image: '/images/admin.jpg',
     },
   });
 }

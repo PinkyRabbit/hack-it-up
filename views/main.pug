@@ -34,7 +34,7 @@ html(lang='ru')
             span.icon-bar
             span.icon-bar
           a.navbar-brand(href="/" title="На главную")
-            img(src="/images/c/logo-min.jpg" alt="logo min")
+            img(src="/images/logo-min.jpg" alt="logo min")
         .navbar-collapse.collapse#navbar
           ul.nav.navbar-nav
             if categories && categories.length
@@ -76,9 +76,9 @@ html(lang='ru')
       header
         div
           if page.image
-            img.logo(src='/images/' + page.image alt=page.title || "hack-it-up")
+            img.logo(src=page.image alt=page.title || "hack-it-up")
           else
-            img.logo(src='/images/c/no-image.jpg' alt='hack-it-up')
+            img.logo(src="/images/no-image.jpg" alt="hack-it-up")
         h1= page.h1 || "Happy Hacking *_*"
       #content
         .row

@@ -5,6 +5,7 @@ const fs = require('fs').promises;
 const { Article } = require('../factories');
 const { ArticleCollection, TagCollection, CategoryCollection } = require('../database');
 const { getFullArticleById } = require('../database.methods');
+const { uploadImageToBucket } = require('../util/s3');
 
 /**
  * Creates a new empty article and redirect to edit page
@@ -38,7 +39,7 @@ async function getEditArticlePage(req, res, next) {
     page: {
       title: 'Редактирование...',
       h1: 'Редактор статьи',
-      image: 'd/admin.jpg',
+      image: '/images/admin.jpg',
     },
   });
 }
@@ -92,24 +93,16 @@ async function saveArticle(req, res) {
 /**
  * Delete old image and set new as article image.
  */
-async function updateArticleImage(req, res) {
+async function updateArticleImage(req, res, next) {
+  if (!req.file) {
+    return next(createError(400, 'Изображение не найдено.'));
+  }
   const { articleId } = req.params;
   const article = await ArticleCollection.findOne({ _id: articleId });
 
-  if (article.image) {
-    const pathToOldImage = path.join(__dirname, '../../public/images/', article.image);
-    try {
-      await fs.unlink(pathToOldImage);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  }
+  const uploadedFileName = await uploadImageToBucket(req.file, article.image);
+  await ArticleCollection.update({ _id: articleId }, { $set: { image: `${uploadedFileName}` } });
 
-  if (req.file) {
-    const { filename } = req.file;
-    await ArticleCollection.update({ _id: articleId }, { $set: { image: `a/${filename}` } });
-  }
   req.flash('success', 'Изображение успешно обновлено.');
   return res.redirect(`/admin/article/${articleId}`);
 }

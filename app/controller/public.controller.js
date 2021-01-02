@@ -17,7 +17,7 @@ async function getHomePage(req, res) {
     keywords: 'nodejs, программирование, блог',
     description: 'Этот блог родился, когда я делал первые шаги в NodeJS. В нём я публикую свои мысли и заметки про программирование и лучше писать код.',
     h1: 'Hello world!',
-    image: 'd/main.jpg',
+    image: '/images/main.jpg',
   };
   const articles = await db.getArticlesForFeed(1);
   return res.render('news-feed', { page, articles });
@@ -70,7 +70,7 @@ async function getCategory(req, res, next) {
     h1: category.name,
     title: category.name,
     description: category.description,
-    image: category.image ? `/b/${category.image}` : '/d/main.jpg',
+    image: category.image ? `/b/${category.image}` : '/images/main.jpg',
   };
   return res.render('news-feed', { page, articles });
 }
@@ -84,7 +84,7 @@ async function getUnpublished(req, res) {
     h1: 'Неопубликованное',
     title: 'Неопубликованное',
     description: 'Неопубликованные статьи сайта',
-    image: '/d/unpublished.jpg',
+    image: '/images/unpublished.jpg',
   };
   return res.render('news-feed', { page, articles, isUnpublished: true });
 }
@@ -107,7 +107,7 @@ async function getArticlesByTag(req, res, next) {
     keywords: tag.name,
     description: `Эта страница посвящена ${tag.name}. Блог разработчика. Программирование - интересное приключение.`,
     h1: `Тег ${tag.name}`,
-    image: 'd/main.jpg',
+    image: '/images/main.jpg',
   };
 
   return res.render('news-feed', {
@@ -128,7 +128,7 @@ async function aboutMePage(res) {
     h1: 'Пару слов обо мне',
     keywords: 'NodeJS, разработчик, резюме',
     description: 'Пару слов обо мне. Эта страничка оформлена в виде рассказа о себе и не несёт рекламный характер. Это не CV.',
-    image: '/d/about-me.jpg',
+    image: '/images/about-me.jpg',
     content: marked(aboutMeMarkup),
   };
   res.render('article', { page });
@@ -146,7 +146,7 @@ async function offersPage(res) {
     h1: 'Я рекомендую',
     keywords: 'NodeJS программы софт',
     description: 'Страничка где я выкладываю полезные инструменты для NodeJS разработчика, которые я рекомендую.',
-    image: '/d/offers.jpg',
+    image: '/images/offers.jpg',
     content: marked(offersMarkup),
   };
   res.render('article', { page });
@@ -184,7 +184,7 @@ function loginPage(req, res) {
     title: 'Вход...',
     description: 'Нечего тебе тут делать, дорогой друг :)',
     h1: 'Дорога в эхо',
-    image: 'd/login.jpg',
+    image: '/images/login.jpg',
   };
   return res.render('login', {
     page,

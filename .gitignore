@@ -18,11 +18,5 @@ node_modules/
 # dotenv environment variables file
 .env
 
-# images
-public/images/a/*.jpg
-public/images/b/*.jpg
-public/images/a/*.png
-public/images/b/*.png
-
 # e2e testrunner
 cypress/
