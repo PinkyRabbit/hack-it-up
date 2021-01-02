@@ -1,6 +1,4 @@
 const createError = require('http-errors');
-const path = require('path');
-const fs = require('fs').promises;
 
 const { Article } = require('../factories');
 const { ArticleCollection, TagCollection, CategoryCollection } = require('../database');

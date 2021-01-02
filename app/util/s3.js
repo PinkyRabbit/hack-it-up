@@ -14,6 +14,11 @@ const s3 = new S3Client({
   },
 });
 
+/**
+ * Method to upload image to S3 bucket.
+ * @param {*} newFile - file object from multer
+ * @param {*} oldImage - old image name
+ */
 async function uploadImageToBucket(newFile, oldImage = null) {
   const fileName = `${Date.now()}${extname(newFile.originalname)}`;
   try {
