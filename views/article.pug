@@ -13,11 +13,10 @@ block content
         |  
         a.btn.btn-default(href=editSlug + '/publish' role="button") вот тут
     if page.tags && page.tags.length
-      - var tagColors = ["default", "primary", "success", "info", "warning", "default", "primary", "success", "info", "warning"];
       section.tags
-        each tag, index in page.tags
+        each tag in page.tags
           a(href="/tag/" + tag.slug title="Тег " + tag.name)
-            span(class="label label-" + tagColors[index])
+            span(class="label label-default")
               span.glyphicon.glyphicon-tag(aria-hidden="true")
               | #{tag.name}
     .category-name-wrapper

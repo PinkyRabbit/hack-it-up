@@ -63,50 +63,41 @@ const defaultLookupsForAggregation = [
   },
 ];
 
+function formatResponse(articles) {
+  if (!articles || !articles.length) {
+    return null;
+  }
+  const [article] = articles;
+  article.image = article.image ? imagePath + article.image : null;
+  const gistRegexp = /<a href="(.*?)".*?>gist<\/a>/gm;
+  article.content = article.content.replace(gistRegexp, '<script src="$1"></script>');
+  return article;
+}
+
 function getFullArticleById(_id) {
-  return new Promise((resolve, reject) => {
-    const aggregation = [...defaultLookupsForAggregation];
-    aggregation.unshift({ $match: { _id: mongodbId(_id) } });
-    aggregation.push(projectForFullArticle);
-    ArticleCollection
-      .aggregate(aggregation)
-      .then((articles) => {
-        if (!articles || !articles.length) {
-          resolve(null);
-        }
-        const [article] = articles;
-        article.image = article.image ? imagePath + article.image : null;
-        resolve(article);
-      })
-      .catch((err) => reject(err));
-  });
+  const aggregation = [...defaultLookupsForAggregation];
+  aggregation.unshift({ $match: { _id: mongodbId(_id) } });
+  aggregation.push(projectForFullArticle);
+  return ArticleCollection
+    .aggregate(aggregation)
+    .then(formatResponse);
 }
 
 function getFullArticleBySlug(slug, categoryId, onlyPublished) {
-  return new Promise((resolve, reject) => {
-    const aggregation = [...defaultLookupsForAggregation];
-    aggregation.unshift({
-      $match: {
-        slug,
-        category: categoryId,
-      },
-    });
-    aggregation.push(projectForFullArticle);
-    if (onlyPublished) {
-      aggregation.unshift({ $match: { isPublished: true } });
-    }
-    ArticleCollection
-      .aggregate(aggregation)
-      .then((articles) => {
-        if (!articles || !articles.length) {
-          resolve(null);
-        }
-        const [article] = articles;
-        article.image = article.image ? imagePath + article.image : null;
-        resolve(article);
-      })
-      .catch((err) => reject(err));
+  const aggregation = [...defaultLookupsForAggregation];
+  aggregation.unshift({
+    $match: {
+      slug,
+      category: categoryId,
+    },
   });
+  aggregation.push(projectForFullArticle);
+  if (onlyPublished) {
+    aggregation.unshift({ $match: { isPublished: true } });
+  }
+  return ArticleCollection
+    .aggregate(aggregation)
+    .then(formatResponse);
 }
 
 /**

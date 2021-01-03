@@ -90,16 +90,15 @@ html(lang='ru')
           aside.col-xs-12.col-sm-3
             //- Tags
             if cloudTags && cloudTags.length
-              - var tagColors = ["success", "info", "active", "warning", "danger"];
               hr
               table.table.tag-cloud
                 thead
                   tr
                     th Облако тегов
                 tbody
-                each tag, index in cloudTags
+                each tag in cloudTags
                   tr
-                    td(class=tagColors[index])
+                    td(class="active")
                       a(href="/tag/" + tag.slug)
                         span.glyphicon.glyphicon-tag(aria-hidden="true")
                         | #{tag.name}
