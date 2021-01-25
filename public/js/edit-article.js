@@ -116,7 +116,7 @@ function addEditor() {
         ['bold', 'italic', 'underline'],
         [{ list: 'ordered' }, { list: 'bullet' }],
         [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-        ['link', 'image', 'code-block'],
+        ['link', 'image', 'code', 'code-block'],
       ],
     },
   };
