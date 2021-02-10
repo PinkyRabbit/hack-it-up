@@ -111,7 +111,7 @@ function addEditor() {
     theme: 'snow',
     modules: {
       toolbar: [
-        [{ header: [1, 2, false] }],
+        [{ header: [2, 3, false] }],
         ['font', 'size'],
         ['bold', 'italic', 'underline'],
         [{ list: 'ordered' }, { list: 'bullet' }],

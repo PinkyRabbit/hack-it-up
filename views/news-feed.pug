@@ -9,7 +9,7 @@ block content
     each article in articles
       - var url = article.isPublished && article.category ? "/" + article.category.slug +"/" + article.slug : "/article/" + article._id; 
       - var imgSrc = article.image || "/images/no-image.jpg";
-      article.news-feed
+      div.news-feed
         h2
           a(href=url)= article.h1 || "Без заголовка..."
         if article.tags && article.tags.length
