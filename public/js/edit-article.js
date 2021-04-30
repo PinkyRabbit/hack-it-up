@@ -171,7 +171,7 @@ function searchTag(val) {
     success: (response) => {
       const { data } = response;
       data.forEach(({ name: tag }) => {
-        tagsList.append(`<a class="list-group-item" href="#" onclick="selectTag(${tag})">${tag}</a>`);
+        tagsList.append(`<a class="list-group-item" href="#" onclick="selectTag('${tag}')">${tag}</a>`);
       });
     },
     error: logOnError,
