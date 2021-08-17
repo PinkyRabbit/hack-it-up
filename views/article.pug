@@ -5,13 +5,25 @@ block content
   - var editSlug = "/admin/article/" + page._id
   if !page.isStatic
     if !page.isPublished
-      .alert(class="alert-info" role='alert' style='margin-bottom: 10px')
-        span.glyphicon.glyphicon-info-sign(aria-hidden="true")
-        strong Внимание! Это превью!
-        br
-        | Статья пока что не опубликована. Для того чтобы её опубликовать нажмите
-        |  
-        a.btn.btn-default(href=editSlug + '/publish' role="button") вот тут
+      form(
+        method="POST"
+        action=editSlug+'/publish' 
+      )
+        label(for="setDate") Дата создания или обновления: 
+        input(
+          type="date"
+          id="setDate"
+          name="setDate"
+          value=(new Date()).toISOString().substr(0, 10)
+          max=(new Date()).toISOString().substr(0, 10)
+        )
+        .alert(class="alert-info" role='alert' style='margin-bottom: 10px')
+          span.glyphicon.glyphicon-info-sign(aria-hidden="true")
+          strong Внимание! Это превью!
+          br
+          | Статья пока что не опубликована. Для того чтобы её опубликовать нажмите
+          |  
+          button.btn.btn-default(type="submit") вот тут
     if page.tags && page.tags.length
       section.tags
         each tag in page.tags

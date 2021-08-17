@@ -15,7 +15,7 @@ function initRoutes(app) {
     .put('/admin/article/:articleId', routerCompositionTo.autosave)
     .post('/admin/article/:articleId', routerCompositionTo.saveArticle)
     .post('/admin/article/:articleId/image', routerCompositionTo.updateArticleImage)
-    .get('/admin/article/:articleId/publish', routerCompositionTo.publishArticle)
+    .post('/admin/article/:articleId/publish', routerCompositionTo.publishArticle)
     .get('/admin/article/:articleId/delete', routerCompositionTo.deleteArticle)
     .get('/admin/categories', routerCompositionTo.manageCategories)
     .post('/admin/categories', routerCompositionTo.createCategory)

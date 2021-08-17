@@ -52,7 +52,8 @@ async function getArticleById(req, res, next) {
   if (!article) {
     return next(createError(404, 'Страница не существует'));
   }
-  return res.render('article', { page: article });
+  const serverDate = (new Date()).toISOString().substr(0, 10);
+  return res.render('article', { page: article, serverDate });
 }
 
 /**
