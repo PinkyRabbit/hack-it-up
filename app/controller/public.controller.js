@@ -64,6 +64,9 @@ async function getCategory(req, res, next) {
     return next();
   }
   const category = await CategoryCollection.findOne({ slug: categorySlug });
+  if (!category) {
+    return next();
+  }
   const articles = await db.getArticlesForFeed(1, { category: category._id });
 
   const page = {
