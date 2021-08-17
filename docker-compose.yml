@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: hack-it-up-development
+    build:
+      context: .
+      target: base
+    volumes:
+      - ./app:/app/app
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./static:/app/static
+      - ./views:/app/views
+    ports:
+      - '3000:3000'
+      - '9999:9999'
+    environment:
+      MONGO_URL: mongodb:27017/db-name
+      PORT: 3000
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+  mongodb:
+    container_name: no-smoking-mongo
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+      - '27018:27018'

@@ -5,6 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach to Docker",
+      "type": "node",
+      "request": "attach",
+      "port": 9999,
+      "restart": true,
+      "trace": true,
+      "protocol": "inspector",
+      "skipFiles": [
+        "<node_internals>/**/*.js",
+        "<eval>/*.*"
+      ],
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app"
+    },
+    {
         "name": "Launch via nodemon",
         "type": "node",
         "request": "launch",

@@ -1,8 +1,9 @@
 {
   "main": "app/index.js",
   "scripts": {
-    "start": "NODE_ENV=production ADMIN_EMAIL=admin@gmail.com ADMIN_PASSWORD=asdqwe node app/index.js",
-    "dev": "NODE_ENV=development ADMIN_EMAIL=admin@gmail.com ADMIN_PASSWORD=asdqwe nodemon app/index.js",
+    "start": "NODE_ENV=production node app/index.js",
+    "dev": "nodemon index.js",
+    "debug": "nodemon --inspect=0.0.0.0:9999 index.js",
     "test:e2e": "cypress open -b chromium"
   },
   "dependencies": {
