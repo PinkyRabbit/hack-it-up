@@ -10,7 +10,7 @@ const { uploadImageToBucket } = require('../util/s3');
  */
 async function createArticle(req, res) {
   const emptyArticle = new Article({});
-  const date = (new Date()).toISOString();
+  const date = (new Date()).toISOString().substr(0, 10);
   emptyArticle.isPublished = false;
   emptyArticle.createdAt = date;
   emptyArticle.updatedAt = date;
@@ -124,7 +124,7 @@ async function extractArticle(req, res, next) {
   if (!article) {
     return next(createError(404, 'Страница не существует'));
   }
-  req.body = article;
+  req.body = { ...req.body, ...article };
   return next();
 }
 
@@ -133,7 +133,8 @@ async function extractArticle(req, res, next) {
  */
 async function publish(req, res) {
   const { articleId } = req.params;
-  const dateOfUpdate = (new Date()).toISOString();
+  const { setDate } = req.body;
+  const dateOfUpdate = setDate || (new Date()).toISOString();
   const updatedArticle = await ArticleCollection.findOneAndUpdate(
     { _id: articleId },
     {

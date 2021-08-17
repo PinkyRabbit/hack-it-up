@@ -28,6 +28,7 @@ module.exports = {
     body('content', 'Текст статьи не может быть пустым.').trim().not().isEmpty(),
     body('category', 'Категория не выбрана.').trim().not().isEmpty(),
     body('tags', 'Нужно выбрать хотя бы 1 тег.').isArray({ min: 1 }),
+    body('setDate', 'Задан не верный формат даты!').optional({ checkFalsy: true }).isISO8601(),
     redirectIfInvalid,
   ],
   tagValidator: [

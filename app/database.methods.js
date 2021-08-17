@@ -128,7 +128,7 @@ function getArticlesForFeed(page = 1, filter = {}) {
     .then((articles) => articles.map((article) => ({
       ...article,
       image: article.image ? imagePath + article.image : null,
-      createdAt: (article.createdAt.split('T'))[0].split('-').reverse().join('.'),
+      updatedAt: (article.updatedAt.split('T'))[0].split('-').reverse().join('.'),
     })));
 }
 
