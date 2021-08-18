@@ -69,8 +69,8 @@ function formatResponse(articles) {
   }
   const [article] = articles;
   article.image = article.image ? imagePath + article.image : null;
-  const gistRegexp = /<a href="(.*?)".*?>gist<\/a>/gm;
-  article.content = article.content.replace(gistRegexp, '<script src="$1"></script>');
+  const gistRegexp = /<a href="(https:\/\/gist\.github\.com\/.*?)".*?>.*?<\/a>/gm;
+  article.content = article.content.replace(gistRegexp, '<script async src="$1" type="text/javascript"></script>');
   return article;
 }
 

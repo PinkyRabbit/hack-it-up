@@ -40,6 +40,12 @@ async function getArticleBySlug(req, res, next) {
     // should return next cuz article could be taken also by id
     return next();
   }
+  // res.setHeader('Access-Control-Allow-Origin', 'https://gist.github.com');
+  // res.setHeader('Access-Control-Allow-Methods', 'GET');
+  // res.setHeader('X-Content-Type-Options', 'nosniff');
+  // res.setHeader('Accept', 'text/html; charset=utf-8');
+  // res.setHeader('content-type', 'text/html; charset=utf-8');
+  res.setHeader('content-type', 'text/html');
   return res.render('article', { page: article });
 }
 

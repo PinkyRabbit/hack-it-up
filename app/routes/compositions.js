@@ -1,4 +1,5 @@
 const csrf = require('csurf');
+const cors = require('cors');
 
 const controller = require('../controller');
 const validators = require('../validators');
@@ -18,11 +19,24 @@ const routerCompositionTo = {
   ],
   getArticleAsUser: [
     validators.articleAndCategorySlugsValidator,
+    cors({
+      // methods: ['ACCEPT', 'GET', 'OPTIONS'],
+      allowedHeaders: ['Accept', 'Content-Type', 'X-Requested-With'],
+      // allowedHeaders: ['Mime-Type', 'text/html'],
+      // cache: false,
+      // maxAge: 60,
+      // credentials: true,
+      // credentials: true,
+      // allowHeaders: 'Content-Type',
+      origin: 'https://gist.github.com',
+    }),
     controller.getArticleBySlug,
   ],
   getArticleAsAdmin: [
     isAuthenticated,
     validators.articleIdValidator,
+    cors({ origin: 'https://gist.github.com' }),
+    // allowGistCorsHeaders,
     controller.getArticleById,
   ],
   getStaticPage: [
