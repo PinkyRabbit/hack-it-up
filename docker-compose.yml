@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   api:
@@ -13,8 +13,8 @@ services:
       - ./static:/app/static
       - ./views:/app/views
     ports:
-      - '3000:3000'
-      - '9999:9999'
+      - "3000:3000"
+      - "9999:9999"
     environment:
       MONGO_URL: mongodb:27017/db-name
       PORT: 3000
@@ -28,5 +28,5 @@ services:
     image: mongo
     restart: unless-stopped
     ports:
-      - '27017:27017'
-      - '27018:27018'
+      - "27017:27017"
+      - "27018:27018"

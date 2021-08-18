@@ -4,16 +4,15 @@ Hi and welcome to the second version of my express nodejs blog.
 
 ## Technologies
 
-* NodeJS
-* MongoDB - database
-* AWS - cloud services
-* Docker
-* GitHub - repository and actions
-* ExpressJS - nodejs framework for websites
-* MonkJS - ORM for more easy db requests
-* Passport - session
-* Pug - as view technology
-* Cypress - e2e testing
+- NodeJS
+- MongoDB - database
+- AWS - cloud services
+- Docker
+- GitHub - repository and actions
+- ExpressJS - nodejs framework for websites
+- MonkJS - ORM for more easy db requests
+- Passport - session
+- Pug - as view technology
 
 ## Reflections
 
