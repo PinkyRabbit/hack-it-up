@@ -1,6 +1,14 @@
 const monk = require('monk');
 
-const url = process.env.MONGO_URL;
+const { MONGO_URL, MONGO_SRV } = process.env;
+if (!MONGO_URL) {
+  console.log('No credentials for mongodb connection.');
+  process.exit(1);
+}
+
+const url = MONGO_SRV === 'ok'
+  ? `mongodb+srv://${MONGO_URL}?retryWrites=true&w=majority`
+  : MONGO_URL;
 
 monk(url).catch((err) => {
   console.log(err); // eslint-disable-line
