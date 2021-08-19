@@ -9,5 +9,8 @@ CMD ["npm", "run", "start:debug"]
 
 FROM base AS production
 COPY app ./app
+COPY public ./public
+COPY static ./static
+COPY views ./views
 RUN npm install --production
 CMD ["npm", "start"]
