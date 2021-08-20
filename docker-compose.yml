@@ -5,7 +5,7 @@ services:
     container_name: hack-it-up-development
     build:
       context: .
-      target: base
+      target: development
     volumes:
       - ./app:/app/app
       - ./src:/app/src
