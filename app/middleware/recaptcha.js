@@ -1,13 +1,16 @@
 const axios = require('axios').default;
 
-const recaptchaSecret = process.env.RECAPTCHA_SECRET;
-const env = process.env.NODE_ENV;
+const {
+  NODE_ENV,
+  RECAPTCHA_SECRET,
+  RECAPTCHA_DISABLED,
+} = process.env;
 
 /**
  * Middleware for recaptcha testing.
  */
 function recaptchaTest(req, res, next) {
-  if (env !== 'production') {
+  if (NODE_ENV !== 'production' || RECAPTCHA_DISABLED === 'ok') {
     return next();
   }
 
@@ -20,7 +23,7 @@ function recaptchaTest(req, res, next) {
   const baseVerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
   const recaptchaQueryObject = {
-    secret: recaptchaSecret,
+    secret: RECAPTCHA_SECRET,
     response: recaptchaResp,
     remoteip: req.ip,
   };
