@@ -5,7 +5,7 @@ COPY package.json ./
 FROM base AS development
 COPY index.js ./
 RUN npm install -s
-CMD ["npm", "run", "start:debug"]
+CMD ["npm", "run", "debug"]
 
 FROM base AS production
 COPY app ./app
