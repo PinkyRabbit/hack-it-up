@@ -61,5 +61,8 @@
     "url": "https://www.hack-it-up.ru/"
   },
   "license": "MIT",
-  "private": false
+  "private": false,
+  "engines": {
+    "node": "16.x"
+  }
 }
