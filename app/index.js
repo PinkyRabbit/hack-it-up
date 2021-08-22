@@ -1,20 +1,17 @@
 const express = require('express');
 const path = require('path');
-const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
 const initSession = require('./middleware/session');
 const initFlash = require('./middleware/flash');
 const initGlobals = require('./middleware/globals');
-const useCompression = require('./middleware/compression');
 const initRoutes = require('./routes');
+const { productionMode } = require('./production');
 
 const app = express();
 
 if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
-  app.use(helmet.noSniff());
-  useCompression(app);
+  productionMode(app);
 }
 
 const rootDirectory = path.resolve(__dirname, '..');
