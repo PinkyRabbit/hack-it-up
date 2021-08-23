@@ -6,7 +6,7 @@ function enableHelmet(app) {
     defaultSrc: ["'self'"],
     fontSrc: ["'self'", 'fonts.gstatic.com'],
     frameSrc: ['www.google.com', 'platform.twitter.com', 'syndication.twitter.com'],
-    imgSrc: ["'self'", 'data:', 'platform.twitter.com', 'pbs.twimg.com', 'syndication.twitter.com'],
+    imgSrc: ["'self'", 'data:', 'platform.twitter.com', 'pbs.twimg.com', 'syndication.twitter.com', 'hack-it-up-bucket.s3.eu-central-1.amazonaws.com'],
     styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'platform.twitter.com', 'cdn.quilljs.com'],
     scriptSrc: ["'self'", "'unsafe-inline'", 'www.gstatic.com', 'www.google.com', 'platform.twitter.com', 'cdn.syndication.twimg.com', 'cdn.quilljs.com'],
   };
