@@ -2,7 +2,7 @@ const axios = require('axios').default;
 
 const {
   NODE_ENV,
-  RECAPTCHA_SECRET,
+  RECAPTCHA_BACK,
   RECAPTCHA_DISABLED,
 } = process.env;
 
@@ -17,17 +17,17 @@ function recaptchaTest(req, res, next) {
   const recaptchaResp = req.body['g-recaptcha-response'];
   if (!recaptchaResp) {
     req.flash('danger', 'Капча не введена! Вы же не робот?');
-    res.redirect('back');
+    return res.redirect('back');
   }
 
   const baseVerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
-  const recaptchaQueryObject = {
-    secret: RECAPTCHA_SECRET,
+  const recaptchaParams = {
+    secret: RECAPTCHA_BACK,
     response: recaptchaResp,
     remoteip: req.ip,
   };
-  const queryAsString = Object.entries(recaptchaQueryObject)
+  const queryAsString = Object.entries(recaptchaParams)
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
@@ -37,7 +37,7 @@ function recaptchaTest(req, res, next) {
     .then(({ data: { success } }) => {
       if (!success) {
         req.flash('warning', 'Ошибка при вводе капчи. Попробуйте снова.');
-        res.redirect('back');
+        return res.redirect('back');
       }
       return next();
     })
